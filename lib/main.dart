@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calc/calculator.dart';
 import 'package:flutter_calc/convertor.dart';
 
 void main() {
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: CurrencyConverter(),
+      // home: CurrencyConverter(),
+      home: Calculator(),
     );
   }
 }
