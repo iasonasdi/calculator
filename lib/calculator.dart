@@ -23,27 +23,67 @@ class _CalculatorState extends State<Calculator> {
         title: const Text('Simple Calculator'),
       ),
       body: Column(
-        children: [          
-          Expanded(
-              child: ConstrainedBox(
+        children: [    
+            // Clock icon for History
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0), 
+              child: Row(
+                children: [
+                  Spacer(), //make it float right
+                  Icon(
+                    Icons.access_time, 
+                    size: 24, 
+                  ),
+                ],
+              ),
+            ),
+           //Clickable History      
+           Expanded(
+            child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 50),
               child: Container(
-                alignment: Alignment.bottomRight,
                 padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  //_history,
-                   _history.split('\n').reversed.take(4).toList().reversed.join('\n'),
-                  style: const TextStyle(
-                    fontSize: 28.0,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  textAlign: TextAlign.right,
-                  maxLines: 4, 
-                  overflow: TextOverflow.ellipsis, 
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: List.generate(
+                    _expression_history.length >= 4 ? 4 : _expression_history.length, 
+                    (index) => GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _output = _expression_history[_expression_history.length - index - 1];
+                          // Reset & Count brackets
+                          openBrackets = 0;
+                          closeBrackets = 0;
+                          for(int i = 0; i < _output.length; i ++) {
+                            if (_output[i] == ')') {
+                              closeBrackets ++;
+                            } else if (_output[i] == '(') {
+                              openBrackets ++;
+                            }
+                          }
+                        });
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          _expression_history[_expression_history.length - index - 1],
+                          style: const TextStyle(
+                            fontSize: 28.0,
+                            fontWeight: FontWeight.normal,
+                            decoration: TextDecoration.none,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ).reversed.toList(),
                 ),
               ),
             ),
           ),
+
+          // Result ouput
           Expanded(
               child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 100),
@@ -61,8 +101,8 @@ class _CalculatorState extends State<Calculator> {
                 ),
               ),
             ),
-          ),          
-          //Devider for output and Buttons
+          ),  
+          //Divider for output and Buttons
           const Divider(
             height: 1, 
             color: Color.fromARGB(173, 158, 158, 158),
