@@ -51,50 +51,54 @@ class _CalculatorState extends State<Calculator> {
             ),
 
            //Clickable History      
-           Expanded(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 150),
-              child: Container(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: List.generate(
-                    _expression_history.length >= 4 ? 4 : _expression_history.length, 
-                    (index) => GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _output = _expression_history[_expression_history.length - index - 1];
-                          // Reset & Count brackets
-                          openBrackets = 0;
-                          closeBrackets = 0;
-                          for(int i = 0; i < _output.length; i ++) {
-                            if (_output[i] == ')') {
-                              closeBrackets ++;
-                            } else if (_output[i] == '(') {
-                              openBrackets ++;
-                            }
-                          }
-                        });
-                      },
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          _expression_history[_expression_history.length - index - 1],
-                          style: const TextStyle(
-                            fontSize: 28.0,
-                            fontWeight: FontWeight.normal,
-                            decoration: TextDecoration.none,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ).reversed.toList(),
+           //Clickable History      
+Expanded(
+  child: ConstrainedBox(
+    constraints: const BoxConstraints(maxHeight: 150),
+    child: SingleChildScrollView( // Wrap with SingleChildScrollView
+      child: Container(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: List.generate(
+            _expression_history.length >= 4 ? 4 : _expression_history.length, 
+            (index) => GestureDetector(
+              onTap: () {
+                setState(() {
+                  _output = _expression_history[_expression_history.length - index - 1];
+                  // Reset & Count brackets
+                  openBrackets = 0;
+                  closeBrackets = 0;
+                  for(int i = 0; i < _output.length; i ++) {
+                    if (_output[i] == ')') {
+                      closeBrackets ++;
+                    } else if (_output[i] == '(') {
+                      openBrackets ++;
+                    }
+                  }
+                });
+              },
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  _expression_history[_expression_history.length - index - 1],
+                  style: const TextStyle(
+                    fontSize: 28.0,
+                    fontWeight: FontWeight.normal,
+                    decoration: TextDecoration.none,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
-          ),
+          ).reversed.toList(),
+        ),
+      ),
+    ),
+  ),
+),
+
           // Result ouput
           Expanded(
               child: ConstrainedBox(
@@ -318,14 +322,22 @@ class _CalculatorState extends State<Calculator> {
   //Function to calculate result and return as String
   String _calculateResult() {
     try {
-      String expression = _output.replaceAll('÷', '/').replaceAll('×', '*').replaceAll('%', '/100');
-      print("Expression is: $expression");
       //Check if Empty
-      if( expression =='')
+      if( _output =='')
       {
         return '';
       }
-      //Display last 3 history expressions
+      print("Fixed _output is: $_output");
+
+      //Fix missing brackets on end
+      while(openBrackets > closeBrackets)
+      {
+        _output += ')';
+        closeBrackets++;
+      }
+      String expression = _output.replaceAll('÷', '/').replaceAll('×', '*').replaceAll('%', '/100');
+
+      //Display last 4 history expressions
       _expression_history.add(_output);
       _total_expression_history.add(_output);
       if( _expression_history.length > 4)
@@ -342,7 +354,7 @@ class _CalculatorState extends State<Calculator> {
       Expression exp = p.parse(expression);
       ContextModel cm = ContextModel();
       double result = exp.evaluate(EvaluationType.REAL, cm);
-      print("Result: $result");
+      //print("Result: $result");
       reset = true;
       return (result.truncate() == result ? result.truncate() : result).toString();
     } catch (e) {
@@ -374,7 +386,7 @@ class _CalculatorState extends State<Calculator> {
      _scaffoldKey.currentState?.openDrawer();
   }
 
-  
+
 
 
 }
