@@ -15,32 +15,45 @@ class _CalculatorState extends State<Calculator> {
   int openBrackets = 0;
   int closeBrackets = 0;
 
+  // Side Panel
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<String> _total_expression_history = [];
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('Simple Calculator'),
+        automaticallyImplyLeading: false,
+        actions: <Widget>[Container()],   //Hide endDrawerIcon
       ),
       body: Column(
         children: [    
-            // Clock icon for History
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0), 
-              child: Row(
-                children: [
-                  Spacer(), //make it float right
-                  Icon(
-                    Icons.access_time, 
-                    size: 24, 
+            //Clickable Clock icon for History
+             GestureDetector(
+                onTap: () {
+                  _openSidePanel();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      Spacer(), // Make it float right
+                      Icon(
+                        Icons.access_time,
+                        size: 24,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
             ),
+
            //Clickable History      
            Expanded(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 50),
+              constraints: const BoxConstraints(maxHeight: 150),
               child: Container(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -116,6 +129,37 @@ class _CalculatorState extends State<Calculator> {
           _buildRow('AC','0','.','='),
         ],
       ),
+
+      //Side Panel
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'History',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            for (var expression in _total_expression_history.reversed)
+              ListTile(
+                title: Text(
+                  expression,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -135,27 +179,27 @@ class _CalculatorState extends State<Calculator> {
 
   //Function to build a calculator's button based on text
   Widget _buildButton(String text) {
-  return Container(
-    margin: EdgeInsets.only(bottom: 20.0), // Add margin bottom of 10 pixels
-    child: RawMaterialButton(
-      onPressed: () {
-        _handleButtonPressed(text);
-      },
-      elevation: 2.0,
-      fillColor: Color.fromARGB(255, 8, 157, 176),
-      padding: EdgeInsets.all(20.0),
-      shape: CircleBorder(),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: text == 'C' || text == 'AC' ? const Color.fromARGB(255, 245, 28, 13) : Colors.black,
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0), // Add margin bottom of 10 pixels
+      child: RawMaterialButton(
+        onPressed: () {
+          _handleButtonPressed(text);
+        },
+        elevation: 2.0,
+        fillColor: Color.fromARGB(255, 8, 157, 176),
+        padding: EdgeInsets.all(20.0),
+        shape: CircleBorder(),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: text == 'C' || text == 'AC' ? const Color.fromARGB(255, 245, 28, 13) : Colors.black,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
 
    
@@ -250,6 +294,7 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
+  //Function to calculate result and return as String
   String _calculateResult() {
     try {
       String expression = _output.replaceAll('÷', '/').replaceAll('×', '*').replaceAll('%', '/100');
@@ -261,6 +306,7 @@ class _CalculatorState extends State<Calculator> {
       }
       //Display last 3 history expressions
       _expression_history.add(_output);
+      _total_expression_history.add(_output);
       if( _expression_history.length > 4)
       {
         _history = _expression_history.sublist(_expression_history.length-4).take(4).join('\n');
@@ -295,6 +341,16 @@ class _CalculatorState extends State<Calculator> {
   bool isOperator(String value) {
     RegExp regex = RegExp(r'[%÷×\-+]');
     return regex.hasMatch(value);
+  }
+
+  // Function to open Side Panel
+  void _openSidePanel() {
+    _scaffoldKey.currentState?.openEndDrawer();
+  }
+
+  //Function to close the side panel
+  void _closeSidePanel() {
+    _scaffoldKey.currentState?.openEndDrawer();
   }
 
 
