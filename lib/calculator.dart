@@ -95,7 +95,6 @@ class _CalculatorState extends State<Calculator> {
               ),
             ),
           ),
-
           // Result ouput
           Expanded(
               child: ConstrainedBox(
@@ -148,18 +147,40 @@ class _CalculatorState extends State<Calculator> {
               ),
             ),
             for (var expression in _total_expression_history.reversed)
-              ListTile(
-                title: Text(
-                  expression,
-                  style: const TextStyle(
-                    fontSize: 16,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _output = expression;
+                   // Reset & Count brackets
+                    openBrackets = 0;
+                    closeBrackets = 0;
+                    for(int i = 0; i < _output.length; i ++) {
+                        if (_output[i] == ')') {
+                          closeBrackets ++;
+                        } else if (_output[i] == '(') {
+                          openBrackets ++;
+                        }
+                    }
+                  });
+                  _closeSidePanel();  //Close panel
+                  // Future.delayed(Duration(milliseconds: 200), () {
+                  //   _closeSidePanel(); // Close the drawer after a short delay
+                  // });
+                },
+                child: ListTile(
+                  title: Text(
+                    expression,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
           ],
         ),
       ),
+
     );
   }
 
@@ -350,8 +371,10 @@ class _CalculatorState extends State<Calculator> {
 
   //Function to close the side panel
   void _closeSidePanel() {
-    _scaffoldKey.currentState?.openEndDrawer();
+     _scaffoldKey.currentState?.openDrawer();
   }
+
+  
 
 
 }
