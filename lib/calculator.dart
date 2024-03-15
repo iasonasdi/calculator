@@ -12,6 +12,9 @@ class _CalculatorState extends State<Calculator> {
   String _history = '';
   List<String> _expression_history = [];
   bool reset = false;
+  int openBrackets = 0;
+  int closeBrackets = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +32,13 @@ class _CalculatorState extends State<Calculator> {
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
                   //_history,
-                   _history.split('\n').reversed.take(3).toList().reversed.join('\n'),
+                   _history.split('\n').reversed.take(4).toList().reversed.join('\n'),
                   style: const TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.normal,
                   ),
-                  maxLines: 3, 
+                  textAlign: TextAlign.right,
+                  maxLines: 4, 
                   overflow: TextOverflow.ellipsis, 
                 ),
               ),
@@ -57,7 +61,14 @@ class _CalculatorState extends State<Calculator> {
                 ),
               ),
             ),
+          ),          
+          //Devider for output and Buttons
+          const Divider(
+            height: 1, 
+            color: Color.fromARGB(173, 158, 158, 158),
           ),
+          const SizedBox(height: 10), // Add space here
+          //Buttons
           _buildRow('C','()','%','÷'),
           _buildRow('7','8','9','×'),
           _buildRow('4','5','6','-'),
@@ -114,21 +125,86 @@ class _CalculatorState extends State<Calculator> {
     setState(() {
       if (text == '=') {
         _output = _calculateResult();
+      } else if (text == '()') {
+        if (_output.isEmpty) {
+            openBrackets+=1;
+            _output += '(';
+        }else{
+            //Non empty input. Compare current brackets
+            //Check last digit. If number or non
+            if(isNumber(_output.substring(_output.length - 1)))
+            { 
+                // If digit is number then
+                //Check if amount of '(' is equal to ')'. 
+                //If first time add openBracket
+                if(openBrackets == 0 || openBrackets == closeBrackets)
+                { 
+                  openBrackets += 1;
+                  _output += '×(';
+                }else{
+                  closeBrackets+=1;
+                  _output += ')';
+                }
+            }else{
+              //if no number then if last digit is ')' and non euqal amount of bracketsadd add clossing
+              if(_output.substring(_output.length - 1) == ')' && openBrackets != closeBrackets)
+              {
+                  closeBrackets+=1;
+                  _output += ')';
+              }
+              else
+              {
+                //if last is ')' then add 'x('
+                if(_output.substring(_output.length - 1) == ')')
+                {
+                  _output += '×';
+                }
+                _output += '(';
+                openBrackets+=1;
+              }
+            }
+        }
       } else if (text == 'AC') {
         _output = '';
+        reset = false;
+        openBrackets = 0;
+        closeBrackets = 0;
       } else if (text == 'C') {
-        _output = _output.substring(0, _output.length - 1);
+        //Check if bracket is deleted
+        if( _output.isNotEmpty)
+        {
+            if( _output.substring(_output.length - 1) == '(')
+            {
+              openBrackets --;
+            } else if( _output.substring(_output.length - 1) == ')')
+            {
+              closeBrackets --;
+            }
+          _output = _output.substring(0, _output.length - 1);
+        }
+        
       } else {
         //Reset output after showing previous result
         if( reset )
         {
           reset = false;
+          openBrackets = 0;
+          closeBrackets = 0;
           //Keep previous result
           if( isNumber(text))
           {
             _output = '';
           }
         }
+        if( isOperator(text))
+        {
+            //Cannot start with operator or have two operators side by side 
+            if( _output.isEmpty || (_output.isNotEmpty && isOperator(_output.substring(_output.length - 1))))
+            {
+              return;
+            }
+        }
+       
         _output += text;
       }
     });
@@ -145,13 +221,13 @@ class _CalculatorState extends State<Calculator> {
       }
       //Display last 3 history expressions
       _expression_history.add(_output);
-      if( _expression_history.length > 3)
+      if( _expression_history.length > 4)
       {
-        _history = _expression_history.sublist(_expression_history.length-3).take(3).join('\n');
+        _history = _expression_history.sublist(_expression_history.length-4).take(4).join('\n');
       }
       else
       {
-        _history = _expression_history.take(3).join('\n');
+        _history = _expression_history.take(4).join('\n');
       }
 
       //Parse expression
@@ -161,7 +237,7 @@ class _CalculatorState extends State<Calculator> {
       double result = exp.evaluate(EvaluationType.REAL, cm);
       print("Result: $result");
       reset = true;
-      return result.toString();
+      return (result.truncate() == result ? result.truncate() : result).toString();
     } catch (e) {
       reset = true;
       return 'Error';
@@ -173,6 +249,12 @@ class _CalculatorState extends State<Calculator> {
   bool isNumber(String value) {
     final RegExp numberRegex = RegExp(r'^-?[0-9]+\.?[0-9]*$');
     return numberRegex.hasMatch(value);
+  }
+
+  //Check if a String is a Operator
+  bool isOperator(String value) {
+    RegExp regex = RegExp(r'[%÷×\-+]');
+    return regex.hasMatch(value);
   }
 
 
