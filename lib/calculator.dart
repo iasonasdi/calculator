@@ -27,105 +27,128 @@ class _CalculatorState extends State<Calculator> {
       appBar: AppBar(
         title: const Text('Simple Calculator'),
         automaticallyImplyLeading: false,
-        actions: <Widget>[Container()],   //Hide endDrawerIcon
+        actions: 
+            //Clickable Clock icon for History
+            <Widget>[
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: IconButton(
+                      icon: Icon(Icons.access_time),
+                      onPressed: () {
+                        _openSidePanel();
+                      },
+                    ),
+                  ),
+                ),
+              ],
       ),
       body: Column(
         children: [    
             //Clickable Clock icon for History
-             GestureDetector(
-                onTap: () {
-                  _openSidePanel();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    children: [
-                      Spacer(), // Make it float right
-                      Icon(
-                        Icons.access_time,
-                        size: 24,
-                      ),
-                    ],
-                  ),
-                ),
-            ),
-
-           //Clickable History      
-           //Clickable History      
-Expanded(
-  child: ConstrainedBox(
-    constraints: const BoxConstraints(maxHeight: 150),
-    child: SingleChildScrollView( // Wrap with SingleChildScrollView
-      child: Container(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: List.generate(
-            _expression_history.length >= 4 ? 4 : _expression_history.length, 
-            (index) => GestureDetector(
-              onTap: () {
-                setState(() {
-                  _output = _expression_history[_expression_history.length - index - 1];
-                  // Reset & Count brackets
-                  openBrackets = 0;
-                  closeBrackets = 0;
-                  for(int i = 0; i < _output.length; i ++) {
-                    if (_output[i] == ')') {
-                      closeBrackets ++;
-                    } else if (_output[i] == '(') {
-                      openBrackets ++;
-                    }
-                  }
-                });
-              },
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  _expression_history[_expression_history.length - index - 1],
-                  style: const TextStyle(
-                    fontSize: 28.0,
-                    fontWeight: FontWeight.normal,
-                    decoration: TextDecoration.none,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-          ).reversed.toList(),
-        ),
-      ),
-    ),
-  ),
-),
-
-          // Result ouput
+          //    GestureDetector(
+          //       onTap: () {
+          //         _openSidePanel();
+          //       },
+          //       child: const Padding(
+          //         padding: EdgeInsets.symmetric(horizontal: 20.0),
+          //         child: Row(
+          //           children: [
+          //             Spacer(), // Make it float right
+          //             Icon(
+          //               Icons.access_time,
+          //               size: 24,
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          // ),
+     
+          //Clickable History      
           Expanded(
               child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 150),
+                child: SingleChildScrollView( // Wrap with SingleChildScrollView
+                  child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: List.generate(
+                        _expression_history.length >= 3 ? 3 : _expression_history.length, 
+                        (index) => GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _output = _expression_history[_expression_history.length - index - 1];
+                              // Reset & Count brackets
+                              openBrackets = 0;
+                              closeBrackets = 0;
+                              for(int i = 0; i < _output.length; i ++) {
+                                if (_output[i] == ')') {
+                                  closeBrackets ++;
+                                } else if (_output[i] == '(') {
+                                  openBrackets ++;
+                                }
+                              }
+                            });
+                          },
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              _expression_history[_expression_history.length - index - 1],
+                              style: const TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.normal,
+                                decoration: TextDecoration.none,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ).reversed.toList(),
+                    ),
+                  ),
+                ),
+              ),
+          ),
+          //Divider for history and Output
+          const Divider(
+            height: 1, 
+            color: Color.fromARGB(173, 158, 158, 158),
+          ),
+          // Result ouput
+          Expanded(
+            child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 100),
               child: Container(
-                alignment: Alignment.bottomRight,
+                alignment: Alignment.centerRight,
                 padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  _output,
-                  style: const TextStyle(
-                    fontSize: 48.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1, // Limit text to 1 line
-                  overflow: TextOverflow.ellipsis, // Show ellipsis if text overflows
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    double fontSize = constraints.maxWidth * 0.1; 
+                    return Text(
+                      _output,
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    );
+                  },
                 ),
               ),
             ),
-          ),  
+          ),
+
           //Divider for output and Buttons
           const Divider(
             height: 1, 
             color: Color.fromARGB(173, 158, 158, 158),
           ),
-          const SizedBox(height: 10), // Add space here
+          const SizedBox(height: 10), // Add space 
           //Buttons
-          _buildRow('C','()','%','÷'),
           _buildRow('7','8','9','×'),
           _buildRow('4','5','6','-'),
           _buildRow('1','2','3','+'),
@@ -167,9 +190,6 @@ Expanded(
                     }
                   });
                   _closeSidePanel();  //Close panel
-                  // Future.delayed(Duration(milliseconds: 200), () {
-                  //   _closeSidePanel(); // Close the drawer after a short delay
-                  // });
                 },
                 child: ListTile(
                   title: Text(
@@ -188,6 +208,7 @@ Expanded(
     );
   }
 
+  
   //Function to return a row with 4 specific elements
   Widget _buildRow(String text1,String text2,String text3,String text4 )
   {
@@ -227,7 +248,6 @@ Expanded(
   }
 
 
-   
 
   //Function to handle the Press of a button.
   void _handleButtonPressed(String text) {
@@ -337,16 +357,16 @@ Expanded(
       }
       String expression = _output.replaceAll('÷', '/').replaceAll('×', '*').replaceAll('%', '/100');
 
-      //Display last 4 history expressions
+      //Display last 3 history expressions
       _expression_history.add(_output);
       _total_expression_history.add(_output);
-      if( _expression_history.length > 4)
+      if( _expression_history.length > 3)
       {
-        _history = _expression_history.sublist(_expression_history.length-4).take(4).join('\n');
+        _history = _expression_history.sublist(_expression_history.length-3).take(3).join('\n');
       }
       else
       {
-        _history = _expression_history.take(4).join('\n');
+        _history = _expression_history.take(3).join('\n');
       }
 
       //Parse expression
