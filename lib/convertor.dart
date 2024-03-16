@@ -8,6 +8,38 @@ import 'package:http/http.dart' as http;
 class CurrencyConverter extends StatefulWidget {
   @override
   _CurrencyConverterState createState() => _CurrencyConverterState();
+
+   Widget buildInputLayout() {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Convertor Mode',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Input 1',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Input 2',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
 }
 
 
@@ -55,36 +87,45 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
       ),
       body: _exchangeRates.isEmpty
           ? Center(child: CircularProgressIndicator())
-          : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '1 EUR =',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _exchangeRates['rates'].length,
-                  itemBuilder: (context, index) {
-                    final currency = _exchangeRates['rates'].keys.elementAt(index);
-                    final rate = _exchangeRates['rates'][currency];
-                    return ListTile(
-                      title: Text(currency),
-                      subtitle: Text(rate.toString()),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-
-
+          : _buildInputLayoutInternal(),
     );
   }
+
+
+   
+
+
+  // Function to build the input layout
+  Widget _buildInputLayoutInternal() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '1 EUR =',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        SizedBox(height: 10),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _exchangeRates['rates'].length,
+            itemBuilder: (context, index) {
+              final currency = _exchangeRates['rates'].keys.elementAt(index);
+              final rate = _exchangeRates['rates'][currency];
+              return ListTile(
+                title: Text(currency),
+                subtitle: Text(rate.toString()),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+
 }
 
 
