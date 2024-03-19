@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+//import 'package:flutter_calc/bck.convertor.dart';
 import 'package:flutter_calc/convertor.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -14,6 +16,10 @@ class _CalculatorState extends State<Calculator> {
   bool reset = false;
   int openBrackets = 0;
   int closeBrackets = 0;
+  //CurrencyConverter convertor = CurrencyConverter();
+  CurrencyConvertor convertor = CurrencyConvertor();
+  String selectedFromCurrency = 'EUR'; // Initially selected currency
+  String selectedToCurrency = 'USD'; // Initially selected currency
 
   // Side Panel
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -50,6 +56,7 @@ class _CalculatorState extends State<Calculator> {
             icon: Icon(Icons.swap_horiz),
             onPressed: () {
               setState(() {
+                convertor.needFetching();
                 isCalculatorMode = !isCalculatorMode;
               });
             },
@@ -58,7 +65,8 @@ class _CalculatorState extends State<Calculator> {
       ),
       body: isCalculatorMode
           ? _buildCalculatorLayout()
-          : CurrencyConverter().buildInputLayout(),
+          : convertor.buildConvertorLayout(selectedFromCurrency,
+              selectedToCurrency), //convertor.buildConvertorLayout(),
       //Side Panel
       endDrawer: Drawer(
         child: ListView(
@@ -104,6 +112,22 @@ class _CalculatorState extends State<Calculator> {
                   ),
                 ),
               ),
+            ListTile(
+              title: TextButton(
+                onPressed: () {
+                  setState(() {
+                    _total_expression_history.clear();
+                  });
+                },
+                child: const Text(
+                  'Clear History',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -114,77 +138,6 @@ class _CalculatorState extends State<Calculator> {
   Widget _buildCalculatorLayout() {
     return Column(
       children: [
-        //Clickable Clock icon for History
-        //    GestureDetector(
-        //       onTap: () {
-        //         _openSidePanel();
-        //       },
-        //       child: const Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 20.0),
-        //         child: Row(
-        //           children: [
-        //             Spacer(), // Make it float right
-        //             Icon(
-        //               Icons.access_time,
-        //               size: 24,
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        // ),
-
-        //Clickable History
-        // Expanded(
-        //     child: ConstrainedBox(
-        //       constraints: const BoxConstraints(maxHeight: 150),
-        //       child: SingleChildScrollView( // Wrap with SingleChildScrollView
-        //         child: Container(
-        //           padding: const EdgeInsets.all(20.0),
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.end,
-        //             children: List.generate(
-        //               _expression_history.length >= 3 ? 3 : _expression_history.length,
-        //               (index) => GestureDetector(
-        //                 onTap: () {
-        //                   setState(() {
-        //                     _output = _expression_history[_expression_history.length - index - 1];
-        //                     // Reset & Count brackets
-        //                     openBrackets = 0;
-        //                     closeBrackets = 0;
-        //                     for(int i = 0; i < _output.length; i ++) {
-        //                       if (_output[i] == ')') {
-        //                         closeBrackets ++;
-        //                       } else if (_output[i] == '(') {
-        //                         openBrackets ++;
-        //                       }
-        //                     }
-        //                   });
-        //                 },
-        //                 child: Align(
-        //                   alignment: Alignment.centerRight,
-        //                   child: Text(
-        //                     _expression_history[_expression_history.length - index - 1],
-        //                     style: const TextStyle(
-        //                       fontSize: 25.0,
-        //                       fontWeight: FontWeight.normal,
-        //                       decoration: TextDecoration.none,
-        //                     ),
-        //                     maxLines: 1,
-        //                     overflow: TextOverflow.ellipsis,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ).reversed.toList(),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        // ),
-        //Divider for history and Output
-        // const Divider(
-        //   height: 1,
-        //   color: Color.fromARGB(173, 158, 158, 158),
-        // ),
         // Result ouput
         Expanded(
           child: ConstrainedBox(
@@ -336,7 +289,13 @@ class _CalculatorState extends State<Calculator> {
           } else if (_output.substring(_output.length - 1) == ')') {
             closeBrackets--;
           }
-          _output = _output.substring(0, _output.length - 1);
+          if (_output.substring(_output.length - 1) == 'r' ||
+              _output.substring(_output.length - 1) == 'y') {
+            //Capture Error
+            _output = "";
+          } else {
+            _output = _output.substring(0, _output.length - 1);
+          }
         }
       } else {
         //Reset output after showing previous result
