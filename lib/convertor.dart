@@ -2,24 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-//Class to store Currencies
-// class CurrencyRate {
-//   final double price;
-//   final String symbol;
-
-//   const CurrencyRate({
-//     required this.price,
-//     required this.symbol,
-//   });
-// }
-
 class CurrencyConvertor {
   //API data
   String API_KEY = "516532786ebd6047df9136338cc5f3bc";
   String base_url = 'http://data.fixer.io/api/';
   String currency_base = 'EUR';
   //dynamic fetch data
-  //List<CurrencyRate> currency_rates = [];
   Map<String, dynamic> _exchangeRates = {};
 
   //Constructor
@@ -37,10 +25,6 @@ class CurrencyConvertor {
       _exchangeRates = json.decode(response.body);
       if (_exchangeRates.containsKey('rates')) {
         print('Length is: ${_exchangeRates['rates'].length}');
-        //   _exchangeRates['rates'].forEach((key, value) {
-        //     //print('$key: $value');
-        //     //currency_rates.add(CurrencyRate(price: value, symbol: key));
-        //   });
       } else {
         print('Rates not found.');
       }
@@ -57,6 +41,7 @@ class CurrencyConvertor {
   //Convertor
   Widget buildConvertorLayout(
       String selectedFromCurrency, String selectedToCurrency) {
+    double _rotationAngle = 0;
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Center(
@@ -85,7 +70,7 @@ class CurrencyConvertor {
                           child: DropdownButton<String>(
                             value: selectedFromCurrency,
                             icon: const Icon(Icons.arrow_drop_down,
-                                color: Colors.blue),
+                                color: Color.fromARGB(255, 8, 157, 176)),
                             underline: Container(height: 0),
                             onChanged: (String? newValue) {
                               setState(() {
@@ -100,7 +85,7 @@ class CurrencyConvertor {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold)),
                               );
@@ -113,18 +98,37 @@ class CurrencyConvertor {
                 ],
               ),
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    // Swap the values of selectedFromCurrency and selectedToCurrency
-                    String temp = selectedFromCurrency;
-                    selectedFromCurrency = selectedToCurrency;
-                    selectedToCurrency = temp;
-                  });
-                },
-                child: const Icon(Icons.swap_vert),
+              //Animated Arrows
+              Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 8, 157, 176),
+                  border: Border.all(color: Colors.blue, width: 2),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      // Swap the values of selectedFromCurrency and selectedToCurrency
+                      String temp = selectedFromCurrency;
+                      selectedFromCurrency = selectedToCurrency;
+                      selectedToCurrency = temp;
+                      // Update the rotation angle for the animation
+                      _rotationAngle += 180;
+                    });
+                  },
+                  child: AnimatedRotation(
+                    //Add animation
+                    duration: const Duration(milliseconds: 500),
+                    turns: _rotationAngle / 360,
+                    child: Transform.scale(
+                      scale: 1.2,
+                      child: const Icon(Icons.swap_vert),
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
+              //Converted Result
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -140,7 +144,7 @@ class CurrencyConvertor {
                           child: DropdownButton<String>(
                             value: selectedToCurrency,
                             icon: const Icon(Icons.arrow_drop_down,
-                                color: Colors.blue),
+                                color: Color.fromARGB(255, 8, 157, 176)),
                             underline: Container(height: 0),
                             onChanged: (String? newValue) {
                               setState(() {
@@ -153,7 +157,7 @@ class CurrencyConvertor {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold)),
                               );
@@ -172,6 +176,3 @@ class CurrencyConvertor {
     );
   }
 }
-
-
-//Class to store Currencies
