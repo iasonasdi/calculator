@@ -56,7 +56,7 @@ class _CalculatorState extends State<Calculator> {
             icon: Icon(Icons.swap_horiz),
             onPressed: () {
               setState(() {
-                convertor.needFetching();
+                convertor.checkRates();
                 isCalculatorMode = !isCalculatorMode;
               });
             },
