@@ -89,8 +89,8 @@ class CurrencyConvertor {
 
   //Function to get widget
   //Convertor
-  Widget buildConvertorLayout(
-      String selectedFromCurrency, String selectedToCurrency) {
+  Widget buildConvertorLayout(String selectedFromCurrency,
+      String selectedToCurrency, String calculatorOutput) {
     double _rotationAngle = 0;
     String _inputAmount = '';
     String _convertedAmount = '';
@@ -145,6 +145,7 @@ class CurrencyConvertor {
                           ),
                         ),
                       ),
+                      //controller: TextEditingController(text: calculatorOutput),
                       onChanged: (String newValue) {
                         setState(() {
                           _inputAmount = newValue;
@@ -157,7 +158,7 @@ class CurrencyConvertor {
                             );
                           } else {
                             _convertedAmount =
-                                ''; // Reset or handle invalid input as needed
+                                'ERR'; // Reset or handle invalid input as needed
                           }
                         });
                       },
