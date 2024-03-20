@@ -145,7 +145,6 @@ class CurrencyConvertor {
                           ),
                         ),
                       ),
-                      //controller: TextEditingController(text: calculatorOutput),
                       onChanged: (String newValue) {
                         setState(() {
                           _inputAmount = newValue;
@@ -158,7 +157,7 @@ class CurrencyConvertor {
                             );
                           } else {
                             _convertedAmount =
-                                'ERR'; // Reset or handle invalid input as needed
+                                ''; // Reset or handle invalid input as needed
                           }
                         });
                       },
@@ -198,57 +197,56 @@ class CurrencyConvertor {
               ),
               const SizedBox(height: 20),
               //Converted Result
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: 'Convert To',
-                        border: const OutlineInputBorder(),
-                        suffixIcon: Container(
-                          child: DropdownButton<String>(
-                            value: selectedToCurrency,
-                            icon: const Icon(Icons.arrow_drop_down,
-                                color: Color.fromARGB(255, 8, 157, 176)),
-                            underline: Container(height: 0),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedToCurrency = newValue!;
-                              });
-                            },
-                            items: _exchangeRates['rates']
-                                .keys
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                              );
-                            }).toList(),
-                          ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 20), // Adjust padding to match TextField
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.grey), // Border color to match TextField
+                    borderRadius: BorderRadius.circular(
+                        4), // Border radius to match TextField
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _convertedAmount.isNotEmpty
+                              ? _convertedAmount
+                              : "Enter amount to convert",
+                          style: TextStyle(
+                              fontSize:
+                                  16), // Adjust font size to match TextField
                         ),
                       ),
-                      // Display the converted amount
-                      controller: TextEditingController(text: _convertedAmount),
-                      // Prevent the cursor from moving to the end of the text field on setState
-                      onTap: () {
-                        final text = _convertedAmount;
-                        // Check if the text field is not empty
-                        if (text.isNotEmpty) {
-                          // Move the cursor to the end of the text field
-                          TextEditingController().selection =
-                              TextSelection.fromPosition(
-                                  TextPosition(offset: text.length));
-                        }
-                      },
-                    ),
+                      // Mimic the dropdown button from your TextField
+                      DropdownButton<String>(
+                        value: selectedToCurrency,
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Color.fromARGB(255, 8, 157, 176)),
+                        underline: Container(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedToCurrency = newValue!;
+                          });
+                        },
+                        items: _exchangeRates['rates']
+                            .keys
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value,
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),
