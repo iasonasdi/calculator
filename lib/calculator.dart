@@ -89,7 +89,7 @@ class _CalculatorState extends State<Calculator> {
       body: isCalculatorMode
           ? _buildCalculatorLayout()
           : convertor.buildConvertorLayout(selectedFromCurrency,
-              selectedToCurrency), //convertor.buildConvertorLayout(),
+              selectedToCurrency,_output), //convertor.buildConvertorLayout(),
       //Side Panel
       endDrawer: Drawer(
         child: ListView(
@@ -240,7 +240,7 @@ class _CalculatorState extends State<Calculator> {
         },
         elevation: 2.0,
         fillColor: text == '='
-            ? Color.fromARGB(255, 7, 120, 219)
+            ? Color.fromARGB(255, 8, 180, 200)
             : Color.fromARGB(255, 8, 157, 176),
         // Adjust padding to be proportional to the button size
         padding:
