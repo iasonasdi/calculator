@@ -64,22 +64,23 @@ class CurrencyConvertor {
       return amount.toStringAsFixed(5);
     }
 
+    //Calculate different conversion rates
     double fromRate = _exchangeRates['rates'][fromCurrency];
     double toRate = _exchangeRates['rates'][toCurrency];
 
-    // If fromCurrency is EUR, directly convert to toCurrency
+    // If fromCurrency is EUR convert to toCurrency
     if (fromCurrency == 'EUR') {
       double convertedAmount = amount * toRate;
       return convertedAmount.toStringAsFixed(5);
     }
 
-    // If toCurrency is EUR, directly convert from fromCurrency to EUR
+    // If toCurrency is EUR, convert from fromCurrency to EUR
     if (toCurrency == 'EUR') {
       double convertedAmount = amount / fromRate;
       return convertedAmount.toStringAsFixed(5);
     }
 
-    // If neither currency is EUR, convert fromCurrency to EUR first, then to toCurrency
+    // If neither currency is EUR, convert fromCurrency to EUR first
     double amountInEUR = amount / fromRate; // Convert fromCurrency to EUR
     double convertedAmount = amountInEUR * toRate; // Convert EUR to toCurrency
 
@@ -91,8 +92,8 @@ class CurrencyConvertor {
   Widget buildConvertorLayout(
       String selectedFromCurrency, String selectedToCurrency) {
     double _rotationAngle = 0;
-    TextEditingController _fromCurrencyController = TextEditingController();
-    TextEditingController _toCurrencyController = TextEditingController();
+    String _inputAmount = '';
+    String _convertedAmount = '';
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Center(
@@ -112,8 +113,8 @@ class CurrencyConvertor {
                 children: [
                   Flexible(
                     child: TextField(
-                      controller: _fromCurrencyController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType
+                          .number, // Ensures only numbers can be entered
                       decoration: InputDecoration(
                         labelText: 'Convert From',
                         border: const OutlineInputBorder(),
@@ -128,17 +129,6 @@ class CurrencyConvertor {
                                 selectedFromCurrency = newValue!;
                                 print(
                                     "Currency selected: $selectedFromCurrency");
-                                // Perform conversion only if there's a valid amount
-                                String amountStr = _fromCurrencyController.text;
-                                double amount = double.tryParse(amountStr) ??
-                                    0; // Default to 0 if parsing fails
-                                if (amount > 0) {
-                                  String convertedAmount = convertCurrency(
-                                      amount,
-                                      selectedFromCurrency,
-                                      selectedToCurrency);
-                                  _toCurrencyController.text = convertedAmount;
-                                }
                               });
                             },
                             items: _exchangeRates['rates']
@@ -157,16 +147,16 @@ class CurrencyConvertor {
                       ),
                       onChanged: (String newValue) {
                         setState(() {
-                          _fromCurrencyController.text = newValue;
+                          _inputAmount = newValue;
                           // Check if the input is a valid number before converting
                           if (double.tryParse(newValue) != null) {
-                            _toCurrencyController.text = convertCurrency(
+                            _convertedAmount = convertCurrency(
                               double.parse(newValue),
                               selectedFromCurrency,
                               selectedToCurrency,
                             );
                           } else {
-                            _toCurrencyController.text =
+                            _convertedAmount =
                                 ''; // Reset or handle invalid input as needed
                           }
                         });
@@ -187,15 +177,9 @@ class CurrencyConvertor {
                   onTap: () {
                     setState(() {
                       // Swap the values of selectedFromCurrency and selectedToCurrency
-                      String tempCurrency = selectedFromCurrency;
+                      String temp = selectedFromCurrency;
                       selectedFromCurrency = selectedToCurrency;
-                      selectedToCurrency = tempCurrency;
-
-                      // Swap the TextField values for From Currency and To Currency
-                      String tempAmount = _fromCurrencyController.text;
-                      _fromCurrencyController.text = _toCurrencyController.text;
-                      _toCurrencyController.text = tempAmount;
-
+                      selectedToCurrency = temp;
                       // Update the rotation angle for the animation
                       _rotationAngle += 180;
                     });
@@ -218,7 +202,6 @@ class CurrencyConvertor {
                 children: [
                   Flexible(
                     child: TextField(
-                      controller: _toCurrencyController,
                       keyboardType: TextInputType.number,
                       readOnly: true,
                       decoration: InputDecoration(
@@ -233,18 +216,6 @@ class CurrencyConvertor {
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedToCurrency = newValue!;
-                                // Reuse the existing amount in the from currency field for conversion
-                                String amountStr = _fromCurrencyController.text;
-                                double amount = double.tryParse(amountStr) ??
-                                    0; // Default to 0 if parsing fails
-                                // Perform conversion only if there's a valid amount
-                                if (amount > 0) {
-                                  String convertedAmount = convertCurrency(
-                                      amount,
-                                      selectedFromCurrency,
-                                      selectedToCurrency);
-                                  _toCurrencyController.text = convertedAmount;
-                                }
                               });
                             },
                             items: _exchangeRates['rates']
@@ -261,6 +232,19 @@ class CurrencyConvertor {
                           ),
                         ),
                       ),
+                      // Display the converted amount
+                      controller: TextEditingController(text: _convertedAmount),
+                      // Prevent the cursor from moving to the end of the text field on setState
+                      onTap: () {
+                        final text = _convertedAmount;
+                        // Check if the text field is not empty
+                        if (text.isNotEmpty) {
+                          // Move the cursor to the end of the text field
+                          TextEditingController().selection =
+                              TextSelection.fromPosition(
+                                  TextPosition(offset: text.length));
+                        }
+                      },
                     ),
                   ),
                 ],
