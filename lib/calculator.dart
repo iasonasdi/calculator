@@ -35,9 +35,33 @@ class _CalculatorState extends State<Calculator> {
       appBar: AppBar(
         title: const Text('Simple Calculator'),
         automaticallyImplyLeading: false,
-        actions:
-            //Clickable Clock icon for History
-            <Widget>[
+        leading: PopupMenuButton<int>(
+          onSelected: (item) => _onSelectMenuItem(item),
+          itemBuilder: (context) => [
+            PopupMenuItem<int>(
+              value: 0,
+              child: Row(
+                children: const [
+                  Icon(Icons.lightbulb_outline),
+                  SizedBox(width: 8),
+                  Text('Theme'),
+                ],
+              ),
+            ),
+            PopupMenuItem<int>(
+              value: 1,
+              child: Row(
+                children: const [
+                  Icon(Icons.help_outline),
+                  SizedBox(width: 8),
+                  Text('Help'),
+                ],
+              ),
+            ),
+          ],
+          icon: Icon(Icons.settings),
+        ),
+        actions: <Widget>[
           Align(
             alignment: Alignment.centerRight,
             child: Padding(
@@ -51,7 +75,6 @@ class _CalculatorState extends State<Calculator> {
             ),
           ),
           // Toggle button for convertor or calculator
-
           IconButton(
             icon: Icon(Icons.swap_horiz),
             onPressed: () {
@@ -216,7 +239,9 @@ class _CalculatorState extends State<Calculator> {
           _handleButtonPressed(text);
         },
         elevation: 2.0,
-        fillColor: Color.fromARGB(255, 8, 157, 176),
+        fillColor: text == '='
+            ? Color.fromARGB(255, 7, 120, 219)
+            : Color.fromARGB(255, 8, 157, 176),
         // Adjust padding to be proportional to the button size
         padding:
             EdgeInsets.all(buttonSize * 0.2), // Example: 20% of button size
@@ -250,8 +275,7 @@ class _CalculatorState extends State<Calculator> {
           //Check last digit. If number or non
           if (isNumber(_output.substring(_output.length - 1))) {
             // If digit is number then
-            //Check if amount of '(' is equal to ')'.
-            //If first time add openBracket
+            //Check if amount of '(' is equal to ')' and non equal amount of brackets add closing
             if (openBrackets == 0 || openBrackets == closeBrackets) {
               openBrackets += 1;
               _output += '×(';
@@ -260,7 +284,7 @@ class _CalculatorState extends State<Calculator> {
               _output += ')';
             }
           } else {
-            //if no number then if last digit is ')' and non euqal amount of bracketsadd add clossing
+            //if no number then if last digit is ')' and non equal amount of brackets add add closing
             if (_output.substring(_output.length - 1) == ')' &&
                 openBrackets != closeBrackets) {
               closeBrackets += 1;
@@ -388,5 +412,19 @@ class _CalculatorState extends State<Calculator> {
   //Function to close the side panel
   void _closeSidePanel() {
     _scaffoldKey.currentState?.openDrawer();
+  }
+
+  void _onSelectMenuItem(int item) {
+    switch (item) {
+      case 0:
+        // Handle light bulb (Theme) action
+        print("Theme selected");
+        break;
+      case 1:
+        // Handle question mark (Help) action
+        print("Help selected");
+        break;
+      default:
+    }
   }
 }
