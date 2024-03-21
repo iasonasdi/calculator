@@ -148,8 +148,9 @@ class CurrencyConvertor {
                       onChanged: (String newValue) {
                         setState(() {
                           _inputAmount = newValue;
-                          String result= convertCurrency(2,selectedFromCurrency, selectedToCurrency);
-                          _convertedAmount ='NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RS: $result and prev: <$_convertedAmount>';
+                          //String result= convertCurrency(2,selectedFromCurrency, selectedToCurrency);
+                          double result = double.parse(newValue);
+                          _convertedAmount ='NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result and prev: <$_convertedAmount>';
                           
                           // Check if the input is a valid number before converting
                           // if (double.tryParse(newValue) != null) {
