@@ -71,11 +71,11 @@ class CurrencyConvertor {
         //return amount.toStringAsFixed(5);
         return amount.toString();
       }
-      return "3.1";
 
   //   //Calculate different conversion rates
-  //    double fromRate = _exchangeRates['rates'][fromCurrency].toDouble();
-  //   double toRate = _exchangeRates['rates'][toCurrency].toDouble();
+      double fromRate = _exchangeRates['rates'][fromCurrency].toDouble();
+      double toRate = _exchangeRates['rates'][toCurrency].toDouble();
+      return "FRRate: $fromRate toRate: $toRate";
   //   // Parse exchange rates to double
   //  // double fromRate = double.tryParse(_exchangeRates['rates'][fromCurrency]) ?? 1.0;
   //   //double toRate = double.tryParse(_exchangeRates['rates'][toCurrency]) ?? 1.0;
