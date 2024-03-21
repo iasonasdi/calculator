@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class CurrencyConvertor {
   //API data
-  String API_KEY = "516532786ebd6047df9136338cc5f3bc";
+  String API_KEY = "34c2a9a9d5855d3027a8fe8c8830c853";//"516532786ebd6047df9136338cc5f3bc";
   String base_url = 'http://data.fixer.io/api/';
   String currency_base = 'EUR';
   //dynamic fetch data
