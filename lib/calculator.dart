@@ -21,6 +21,7 @@ class _CalculatorState extends State<Calculator> {
   String selectedFromCurrency = 'EUR'; // Initially selected currency
   String selectedToCurrency = 'USD'; // Initially selected currency
   String inputValue=''; //Input value for conversion
+  String conversionOutput=''; //Input value for conversion
 
   // Function to update selectedFromCurrency
   void updateSelectedFromCurrency(String newValue) {
@@ -40,6 +41,12 @@ class _CalculatorState extends State<Calculator> {
   void updateInputValue(String newValue) {
     setState(() {
       inputValue = newValue;
+    });
+  }
+  // Function to update inputValue
+  void updateConversionOutputValue(String newValue) {
+    setState(() {
+      conversionOutput = newValue;
     });
   }
 
@@ -119,9 +126,11 @@ class _CalculatorState extends State<Calculator> {
               selectedFromCurrency,
               selectedToCurrency,
               inputValue,
+              conversionOutput,
               updateSelectedFromCurrency,
               updateSelectedToCurrency,
               updateInputValue,
+              updateConversionOutputValue,
             ),
       //Side Panel
       endDrawer: Drawer(
