@@ -148,17 +148,19 @@ class CurrencyConvertor {
                       onChanged: (String newValue) {
                         setState(() {
                           _inputAmount = newValue;
+                          _convertedAmount ='IF:$_inputAmount to $newValue and prev: $_convertedAmount and is: ${_convertedAmount.isEmpty}';
                           // Check if the input is a valid number before converting
-                          if (double.tryParse(newValue) != null) {
-                            _convertedAmount = convertCurrency(
-                              double.parse(newValue),
-                              selectedFromCurrency,
-                              selectedToCurrency,
-                            );
-                            _convertedAmount ='IF:$_inputAmount';
-                          } else {
-                            _convertedAmount ='Val:$newValue';//''; // Reset or handle invalid input as needed
-                          }
+                          // if (double.tryParse(newValue) != null) {
+                          //   _convertedAmount = convertCurrency(
+                          //     double.parse(newValue),
+                          //     selectedFromCurrency,
+                          //     selectedToCurrency,
+                          //   );
+                          //   _convertedAmount ='IF:$_inputAmount';
+                          // } else {
+                          //   _convertedAmount='2';
+                          //   //_convertedAmount ='Val:$newValue';//''; // Reset or handle invalid input as needed
+                          // }
                         });
                       },
                     ),
