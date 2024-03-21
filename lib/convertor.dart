@@ -42,6 +42,7 @@ class CurrencyConvertor {
   //Function to check if rates are needed
   void checkRates() {
     if (needFetching()) {
+      print("Needs fetching");
       _fetchExchangeRates();
     }
   }
@@ -107,7 +108,7 @@ class CurrencyConvertor {
     void Function(String) updateConversionOutputValue,
   ) {
     double _rotationAngle = 0;
-    String _inputAmount = '';
+    //String _inputAmount = '';
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Center(
@@ -142,8 +143,16 @@ class CurrencyConvertor {
                               setState(() {
                                 selectedFromCurrency = newValue!;
                                 updateSelectedFromCurrency(newValue);
-                                print(
-                                    "Currency selected: $selectedFromCurrency");
+                                //Update Results every time drop down changes
+                                if (containsOnlyNumbers(inputValue)) {
+                                  conversionOutput = convertCurrency(
+                                      double.parse(inputValue),
+                                      selectedFromCurrency,
+                                      selectedToCurrency);
+                                  updateConversionOutputValue(conversionOutput);
+                                } else {
+                                  conversionOutput = 'ERR';
+                                }
                               });
                             },
                             items: _exchangeRates['rates']
@@ -162,26 +171,19 @@ class CurrencyConvertor {
                       ),
                       onChanged: (String newValue) {
                         setState(() {
-                          _inputAmount = newValue;
+                          inputValue = newValue;
                           //String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
                           //double result = double.parse(newValue);
-                          conversionOutput = convertCurrency(
-                              double.parse(newValue),
-                              selectedFromCurrency,
-                              selectedToCurrency);
-                          updateConversionOutputValue(conversionOutput);
-                          // Check if the input is a valid number before converting
-                          // if (double.tryParse(newValue) != null) {
-                          //   conversionOutput = convertCurrency(
-                          //     double.parse(newValue),
-                          //     selectedFromCurrency,
-                          //     selectedToCurrency,
-                          //   );
-                          //   conversionOutput ='IF:$_inputAmount';
-                          // } else {
-                          //   conversionOutput='2';
-                          //   //conversionOutput ='Val:$newValue';//''; // Reset or handle invalid input as needed
-                          // }
+                          if (containsOnlyNumbers(inputValue)) {
+                            conversionOutput = convertCurrency(
+                                double.parse(newValue),
+                                selectedFromCurrency,
+                                selectedToCurrency);
+                            updateConversionOutputValue(conversionOutput);
+                            updateInputValue(inputValue);
+                          } else {
+                            conversionOutput = 'ERR';
+                          }
                         });
                       },
                     ),
@@ -203,6 +205,15 @@ class CurrencyConvertor {
                       String temp = selectedFromCurrency;
                       selectedFromCurrency = selectedToCurrency;
                       selectedToCurrency = temp;
+                      updateSelectedFromCurrency(selectedFromCurrency);
+                      updateSelectedToCurrency(selectedToCurrency);
+                      //Swap Values on inputs
+                      // String tempVal = inputValue;
+                      // inputValue = conversionOutput;
+                      conversionOutput = '';
+                      updateConversionOutputValue('');
+                      // updateInputValue(inputValue);
+                      print("Swapped to: $inputValue and $conversionOutput");
                       // Update the rotation angle for the animation
                       _rotationAngle += 180;
                     });
@@ -254,6 +265,15 @@ class CurrencyConvertor {
                           setState(() {
                             selectedToCurrency = newValue!;
                             updateSelectedToCurrency(newValue);
+                            if (containsOnlyNumbers(inputValue)) {
+                              conversionOutput = convertCurrency(
+                                  double.parse(inputValue),
+                                  selectedFromCurrency,
+                                  selectedToCurrency);
+                              updateConversionOutputValue(conversionOutput);
+                            } else {
+                              conversionOutput = 'ERR';
+                            }
                           });
                         },
                         items: _exchangeRates['rates']
@@ -277,6 +297,11 @@ class CurrencyConvertor {
         );
       },
     );
+  }
+
+  bool containsOnlyNumbers(String inputAmount) {
+    // Use a regular expression to match only digits (0-9)
+    return RegExp(r'^[0-9]+$').hasMatch(inputAmount);
   }
 
   Map<String, dynamic> getDefaultRates() {
