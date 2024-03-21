@@ -72,11 +72,11 @@ class CurrencyConvertor {
     }
 
     //Calculate different conversion rates
-    // double fromRate = _exchangeRates['rates'][fromCurrency];
-    // double toRate = _exchangeRates['rates'][toCurrency];
+     double fromRate = _exchangeRates['rates'][fromCurrency];
+    double toRate = _exchangeRates['rates'][toCurrency];
     // Parse exchange rates to double
-    double fromRate = double.tryParse(_exchangeRates['rates'][fromCurrency]) ?? 1.0;
-    double toRate = double.tryParse(_exchangeRates['rates'][toCurrency]) ?? 1.0;
+   // double fromRate = double.tryParse(_exchangeRates['rates'][fromCurrency]) ?? 1.0;
+    //double toRate = double.tryParse(_exchangeRates['rates'][toCurrency]) ?? 1.0;
 
     // If fromCurrency is EUR convert to toCurrency
     if (fromCurrency == 'EUR') {
@@ -159,8 +159,8 @@ class CurrencyConvertor {
                         setState(() {
                           _inputAmount = newValue;
                           
-                          //String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
-                          double result = double.parse(newValue);
+                          String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
+                          //double result = double.parse(newValue);
                           _convertedAmount ='from:$selectedFromCurrency wRT: ${_exchangeRates['rates'][selectedFromCurrency]} to $selectedToCurrency wRT: ${_exchangeRates['rates'][selectedToCurrency]} and NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result and prev: <$_convertedAmount>';
                           
                           // Check if the input is a valid number before converting
