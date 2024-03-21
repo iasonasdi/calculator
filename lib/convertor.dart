@@ -155,6 +155,7 @@ class CurrencyConvertor {
                               selectedFromCurrency,
                               selectedToCurrency,
                             );
+                            _convertedAmount ='IF:$_inputAmount';
                           } else {
                             _convertedAmount ='Val:$newValue';//''; // Reset or handle invalid input as needed
                           }
