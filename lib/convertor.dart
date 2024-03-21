@@ -60,6 +60,10 @@ class CurrencyConvertor {
   //Function to return the converting rate
   String convertCurrency(
       double amount, String fromCurrency, String toCurrency) {
+        if(_exchangeRates['rates'] == null || _exchangeRates['rates'][fromCurrency] == null || _exchangeRates['rates'][toCurrency] == null)
+        {
+          return "NaN";
+        }
         return "3.0";
     // Check if either currency is not found
   //   if (_exchangeRates['rates'][fromCurrency] == null ||
