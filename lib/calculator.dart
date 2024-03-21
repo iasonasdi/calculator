@@ -73,31 +73,38 @@ class _CalculatorState extends State<Calculator> {
         title: const Text('Simple Calculator',
             style: TextStyle(color: Colors.black)),
         automaticallyImplyLeading: false,
-        leading: PopupMenuButton<int>(
-          onSelected: (item) => _onSelectMenuItem(item),
-          itemBuilder: (context) => [
-            PopupMenuItem<int>(
-              value: 0,
-              child: Row(
-                children: const [
-                  Icon(Icons.lightbulb_outline),
-                  SizedBox(width: 8),
-                  Text('Theme'),
-                ],
-              ),
+        leading: Theme(
+          data: Theme.of(context).copyWith(
+            popupMenuTheme: PopupMenuThemeData(
+              color: _isDarkThemeEnabled ? Color(0xFF435585) : Colors.white,
             ),
-            PopupMenuItem<int>(
-              value: 1,
-              child: Row(
-                children: const [
-                  Icon(Icons.help_outline),
-                  SizedBox(width: 8),
-                  Text('Help'),
-                ],
+          ),
+          child: PopupMenuButton<int>(
+            onSelected: (item) => _onSelectMenuItem(item),
+            itemBuilder: (context) => [
+              PopupMenuItem<int>(
+                value: 0,
+                child: Row(
+                  children: const [
+                    Icon(Icons.lightbulb_outline, color: Colors.black),
+                    SizedBox(width: 8),
+                    Text('Theme', style: TextStyle(color: Colors.black)),
+                  ],
+                ),
               ),
-            ),
-          ],
-          icon: const Icon(Icons.settings, color: Colors.black),
+              PopupMenuItem<int>(
+                value: 1,
+                child: Row(
+                  children: const [
+                    Icon(Icons.help_outline, color: Colors.black),
+                    SizedBox(width: 8),
+                    Text('Help', style: TextStyle(color: Colors.black)),
+                  ],
+                ),
+              ),
+            ],
+            icon: const Icon(Icons.settings, color: Colors.black),
+          ),
         ),
         actions: <Widget>[
           Align(
@@ -480,6 +487,39 @@ class _CalculatorState extends State<Calculator> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
+  //Modal for Help
+  void _showHelpPanel() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(20),
+          color: _isDarkThemeEnabled ? Color(0xFF435585) : Colors.white,
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.info_outline, color: Colors.black),
+                title: Text('This is a simple calculator',
+                    style: TextStyle(color: Colors.black)),
+              ),
+              ListTile(
+                leading: Icon(Icons.history, color: Colors.black),
+                title: Text('Click on any history to use it again.',
+                    style: TextStyle(color: Colors.black)),
+              ),
+              ListTile(
+                leading: Icon(Icons.swap_horiz, color: Colors.black),
+                title: Text(
+                    'You can use the arrows top right to perform various currency conversions.',
+                    style: TextStyle(color: Colors.black)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _onSelectMenuItem(int item) {
     switch (item) {
       case 0:
@@ -492,6 +532,7 @@ class _CalculatorState extends State<Calculator> {
       case 1:
         // Handle question mark (Help) action
         print("Help selected");
+        _showHelpPanel();
         break;
       default:
     }
