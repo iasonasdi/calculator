@@ -23,6 +23,9 @@ class _CalculatorState extends State<Calculator> {
   String inputValue = ''; //Input value for conversion
   String conversionOutput = ''; //Input value for conversion
 
+  //Dark theme
+  bool _isDarkThemeEnabled = false;
+
   // Function to update selectedFromCurrency
   void updateSelectedFromCurrency(String newValue) {
     setState(() {
@@ -60,10 +63,15 @@ class _CalculatorState extends State<Calculator> {
 
   @override
   Widget build(BuildContext context) {
+    Color backgroundColor =
+        _isDarkThemeEnabled ? Color(0xFF435585) : Colors.white;
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text('Simple Calculator'),
+        backgroundColor: _isDarkThemeEnabled ? Color(0xFF363062) : Colors.blue,
+        title: const Text('Simple Calculator',
+            style: TextStyle(color: Colors.black)),
         automaticallyImplyLeading: false,
         leading: PopupMenuButton<int>(
           onSelected: (item) => _onSelectMenuItem(item),
@@ -89,7 +97,7 @@ class _CalculatorState extends State<Calculator> {
               ),
             ),
           ],
-          icon: Icon(Icons.settings),
+          icon: const Icon(Icons.settings, color: Colors.black),
         ),
         actions: <Widget>[
           Align(
@@ -97,7 +105,7 @@ class _CalculatorState extends State<Calculator> {
             child: Padding(
               padding: const EdgeInsets.only(right: 10.0),
               child: IconButton(
-                icon: Icon(Icons.access_time),
+                icon: const Icon(Icons.access_time, color: Colors.black),
                 onPressed: () {
                   _openSidePanel();
                 },
@@ -106,7 +114,7 @@ class _CalculatorState extends State<Calculator> {
           ),
           // Toggle button for convertor or calculator
           IconButton(
-            icon: Icon(Icons.swap_horiz),
+            icon: const Icon(Icons.swap_horiz, color: Colors.black),
             onPressed: () {
               setState(() {
                 convertor.checkRates();
@@ -131,69 +139,77 @@ class _CalculatorState extends State<Calculator> {
               updateSelectedToCurrency,
               updateInputValue,
               updateConversionOutputValue,
+              _isDarkThemeEnabled,
             ),
       //Side Panel
       endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'History',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+        child: Container(
+          color: _isDarkThemeEnabled ? Color(0xFF435585) : Colors.white,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: _isDarkThemeEnabled ? Color(0xFF363062) : Colors.blue,
                 ),
-              ),
-            ),
-            for (var expression in _total_expression_history.reversed)
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _output = expression;
-                    // Reset & Count brackets
-                    openBrackets = 0;
-                    closeBrackets = 0;
-                    for (int i = 0; i < _output.length; i++) {
-                      if (_output[i] == ')') {
-                        closeBrackets++;
-                      } else if (_output[i] == '(') {
-                        openBrackets++;
-                      }
-                    }
-                  });
-                  _closeSidePanel(); //Close panel
-                },
-                child: ListTile(
-                  title: Text(
-                    expression,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            ListTile(
-              title: TextButton(
-                onPressed: () {
-                  setState(() {
-                    _total_expression_history.clear();
-                  });
-                },
-                child: const Text(
-                  'Clear History',
+                child: Text(
+                  'History',
                   style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
+                    color:
+                        _isDarkThemeEnabled ? Color(0xFF818FB4) : Colors.white,
+                    fontSize: 24,
                   ),
                 ),
               ),
-            ),
-          ],
+              for (var expression in _total_expression_history.reversed)
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _output = expression;
+                      // Reset & Count brackets
+                      openBrackets = 0;
+                      closeBrackets = 0;
+                      for (int i = 0; i < _output.length; i++) {
+                        if (_output[i] == ')') {
+                          closeBrackets++;
+                        } else if (_output[i] == '(') {
+                          openBrackets++;
+                        }
+                      }
+                    });
+                    _closeSidePanel(); //Close panel
+                  },
+                  child: ListTile(
+                    title: Text(
+                      expression,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ListTile(
+                title: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _total_expression_history.clear();
+                    });
+                  },
+                  child: Text(
+                    'Clear History',
+                    style: TextStyle(
+                      color: _isDarkThemeEnabled
+                          ? Color(0xFF818FB4)
+                          : Color.fromARGB(255, 128, 24, 24),
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -282,8 +298,14 @@ class _CalculatorState extends State<Calculator> {
         },
         elevation: 2.0,
         fillColor: text == '='
-            ? Color.fromARGB(255, 8, 180, 200)
-            : Color.fromARGB(255, 8, 157, 176),
+            ? _isDarkThemeEnabled
+                ? Color(0xFF818FB4) // Bright teal for '=' button in dark theme
+                : Color.fromARGB(
+                    255, 8, 180, 200) // Original color for light theme
+            : _isDarkThemeEnabled
+                ? Color(0xFF363062) // Dark theme color for other buttons
+                : Color.fromARGB(255, 8, 157,
+                    176), // Light theme color for other buttons // Light theme color for other buttons
         // Adjust padding to be proportional to the button size
         padding:
             EdgeInsets.all(buttonSize * 0.2), // Example: 20% of button size
@@ -292,7 +314,9 @@ class _CalculatorState extends State<Calculator> {
           text,
           style: TextStyle(
             color: text == 'C' || text == 'AC'
-                ? const Color.fromARGB(255, 245, 28, 13)
+                ? _isDarkThemeEnabled
+                    ? Color(0xFF818FB4)
+                    : Color.fromARGB(255, 128, 24, 24)
                 : Colors.black,
             // Adjust font size to be proportional to the button size
             fontSize: buttonSize * 0.3, // Example: 30% of button size
@@ -461,6 +485,9 @@ class _CalculatorState extends State<Calculator> {
       case 0:
         // Handle light bulb (Theme) action
         print("Theme selected");
+        setState(() {
+          _isDarkThemeEnabled = !_isDarkThemeEnabled;
+        });
         break;
       case 1:
         // Handle question mark (Help) action
