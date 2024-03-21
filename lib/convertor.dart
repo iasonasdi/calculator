@@ -81,19 +81,21 @@ class CurrencyConvertor {
         double convertedAmount = amount * toRate;
         return convertedAmount.toStringAsFixed(5);
       }
-      return "FRRate: $fromRate toRate: $toRate";
 
-  //   // If toCurrency is EUR, convert from fromCurrency to EUR
-  //   if (toCurrency == 'EUR') {
-  //     double convertedAmount = amount / fromRate;
-  //     return convertedAmount.toStringAsFixed(5);
-  //   }
+      // If toCurrency is EUR, convert from fromCurrency to EUR
+      if (toCurrency == 'EUR') {
+        double convertedAmount = amount / fromRate;
+        return convertedAmount.toStringAsFixed(5);
+      }
 
-  //   // If neither currency is EUR, convert fromCurrency to EUR first
-  //   double amountInEUR = amount / fromRate; // Convert fromCurrency to EUR
-  //   double convertedAmount = amountInEUR * toRate; // Convert EUR to toCurrency
+      // return "FRRate: $fromRate toRate: $toRate";
 
-  //   return convertedAmount.toStringAsFixed(5);
+
+    // If neither currency is EUR, convert fromCurrency to EUR first
+    double amountInEUR = amount / fromRate; // Convert fromCurrency to EUR
+    double convertedAmount = amountInEUR * toRate; // Convert EUR to toCurrency
+
+    return convertedAmount.toStringAsFixed(5);
   }
 
   //Function to get widget
