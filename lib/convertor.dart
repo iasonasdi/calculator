@@ -151,10 +151,10 @@ class CurrencyConvertor {
                       onChanged: (String newValue) {
                         setState(() {
                           _inputAmount = newValue;
-                          _convertedAmount = "from:$selectedFromCurrency to $selectedToCurrency and";//on rate:${_exchangeRates['rates'][selectedFromCurrency]}++";
+                          
                           //String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
                           double result = double.parse(newValue);
-                          _convertedAmount +='NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result and prev: <$_convertedAmount>';
+                          _convertedAmount ='from:$selectedFromCurrency to $selectedToCurrency and NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result and prev: <$_convertedAmount>';
                           
                           // Check if the input is a valid number before converting
                           // if (double.tryParse(newValue) != null) {
