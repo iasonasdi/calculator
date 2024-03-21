@@ -68,13 +68,14 @@ class CurrencyConvertor {
 
       // If both currencies are the same, return the amount directly
       if (fromCurrency == toCurrency) {
-        return amount.toStringAsFixed(5);
+        //return amount.toStringAsFixed(5);
+        return amount.toString();
       }
       return "3.1";
 
   //   //Calculate different conversion rates
-  //    double fromRate = _exchangeRates['rates'][fromCurrency];
-  //   double toRate = _exchangeRates['rates'][toCurrency];
+  //    double fromRate = _exchangeRates['rates'][fromCurrency].toDouble();
+  //   double toRate = _exchangeRates['rates'][toCurrency].toDouble();
   //   // Parse exchange rates to double
   //  // double fromRate = double.tryParse(_exchangeRates['rates'][fromCurrency]) ?? 1.0;
   //   //double toRate = double.tryParse(_exchangeRates['rates'][toCurrency]) ?? 1.0;
@@ -100,8 +101,16 @@ class CurrencyConvertor {
 
   //Function to get widget
   //Convertor
-  Widget buildConvertorLayout(String selectedFromCurrency,
-      String selectedToCurrency, String calculatorOutput) {
+  // Widget buildConvertorLayout(String selectedFromCurrency,
+  //     String selectedToCurrency, String calculatorOutput) {
+        Widget buildConvertorLayout(
+  String selectedFromCurrency,
+  String selectedToCurrency,
+  String inputValue,
+  void Function(String) updateSelectedFromCurrency,
+  void Function(String) updateSelectedToCurrency,
+  void Function(String) updateInputValue,
+) {
     double _rotationAngle = 0;
     String _inputAmount = '';
     String _convertedAmount = '';
@@ -138,6 +147,7 @@ class CurrencyConvertor {
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedFromCurrency = newValue!;
+                                updateSelectedFromCurrency(newValue);
                                 print(
                                     "Currency selected: $selectedFromCurrency");
                               });
@@ -246,6 +256,7 @@ class CurrencyConvertor {
                         onChanged: (String? newValue) {
                           setState(() {
                             selectedToCurrency = newValue!;
+                            updateSelectedToCurrency(newValue);
                           });
                         },
                         items: _exchangeRates['rates']
