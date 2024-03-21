@@ -20,6 +20,29 @@ class _CalculatorState extends State<Calculator> {
   CurrencyConvertor convertor = CurrencyConvertor();
   String selectedFromCurrency = 'EUR'; // Initially selected currency
   String selectedToCurrency = 'USD'; // Initially selected currency
+  String inputValue=''; //Input value for conversion
+
+  // Function to update selectedFromCurrency
+  void updateSelectedFromCurrency(String newValue) {
+    setState(() {
+      selectedFromCurrency = newValue;
+    });
+  }
+
+  // Function to update selectedToCurrency
+  void updateSelectedToCurrency(String newValue) {
+    setState(() {
+      selectedToCurrency = newValue;
+    });
+  }
+
+  // Function to update inputValue
+  void updateInputValue(String newValue) {
+    setState(() {
+      inputValue = newValue;
+    });
+  }
+
 
   // Side Panel
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -86,10 +109,20 @@ class _CalculatorState extends State<Calculator> {
           ),
         ],
       ),
+      // body: isCalculatorMode
+      //     ? _buildCalculatorLayout()
+      //     : convertor.buildConvertorLayout(selectedFromCurrency,
+      //         selectedToCurrency,_output), //convertor.buildConvertorLayout(),
       body: isCalculatorMode
           ? _buildCalculatorLayout()
-          : convertor.buildConvertorLayout(selectedFromCurrency,
-              selectedToCurrency,_output), //convertor.buildConvertorLayout(),
+          : convertor.buildConvertorLayout(
+              selectedFromCurrency,
+              selectedToCurrency,
+              inputValue,
+              updateSelectedFromCurrency,
+              updateSelectedToCurrency,
+              updateInputValue,
+            ),
       //Side Panel
       endDrawer: Drawer(
         child: ListView(
