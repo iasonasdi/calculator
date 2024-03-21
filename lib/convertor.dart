@@ -60,21 +60,17 @@ class CurrencyConvertor {
   //Function to return the converting rate
   String convertCurrency(
       double amount, String fromCurrency, String toCurrency) {
-        if(_exchangeRates['rates'] == null || _exchangeRates['rates'][fromCurrency] == null || _exchangeRates['rates'][toCurrency] == null)
-        {
-          return "NaN";
-        }
-        return "3.0";
-    // Check if either currency is not found
-  //   if (_exchangeRates['rates'][fromCurrency] == null ||
-  //       _exchangeRates['rates'][toCurrency] == null) {
-  //     return "NaN";
-  //   }
+      // Check if either currency is not found
+      if(_exchangeRates['rates'] == null || _exchangeRates['rates'][fromCurrency] == null || _exchangeRates['rates'][toCurrency] == null)
+      {
+        return "NaN";
+      }
 
-  //   // If both currencies are the same, return the amount directly
-  //   if (fromCurrency == toCurrency) {
-  //     return amount.toStringAsFixed(5);
-  //   }
+      // If both currencies are the same, return the amount directly
+      if (fromCurrency == toCurrency) {
+        return amount.toStringAsFixed(5);
+      }
+      return "3.1";
 
   //   //Calculate different conversion rates
   //    double fromRate = _exchangeRates['rates'][fromCurrency];
