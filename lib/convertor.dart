@@ -60,41 +60,42 @@ class CurrencyConvertor {
   //Function to return the converting rate
   String convertCurrency(
       double amount, String fromCurrency, String toCurrency) {
+        return "3.0";
     // Check if either currency is not found
-    if (_exchangeRates['rates'][fromCurrency] == null ||
-        _exchangeRates['rates'][toCurrency] == null) {
-      return "NaN";
-    }
+  //   if (_exchangeRates['rates'][fromCurrency] == null ||
+  //       _exchangeRates['rates'][toCurrency] == null) {
+  //     return "NaN";
+  //   }
 
-    // If both currencies are the same, return the amount directly
-    if (fromCurrency == toCurrency) {
-      return amount.toStringAsFixed(5);
-    }
+  //   // If both currencies are the same, return the amount directly
+  //   if (fromCurrency == toCurrency) {
+  //     return amount.toStringAsFixed(5);
+  //   }
 
-    //Calculate different conversion rates
-     double fromRate = _exchangeRates['rates'][fromCurrency];
-    double toRate = _exchangeRates['rates'][toCurrency];
-    // Parse exchange rates to double
-   // double fromRate = double.tryParse(_exchangeRates['rates'][fromCurrency]) ?? 1.0;
-    //double toRate = double.tryParse(_exchangeRates['rates'][toCurrency]) ?? 1.0;
+  //   //Calculate different conversion rates
+  //    double fromRate = _exchangeRates['rates'][fromCurrency];
+  //   double toRate = _exchangeRates['rates'][toCurrency];
+  //   // Parse exchange rates to double
+  //  // double fromRate = double.tryParse(_exchangeRates['rates'][fromCurrency]) ?? 1.0;
+  //   //double toRate = double.tryParse(_exchangeRates['rates'][toCurrency]) ?? 1.0;
 
-    // If fromCurrency is EUR convert to toCurrency
-    if (fromCurrency == 'EUR') {
-      double convertedAmount = amount * toRate;
-      return convertedAmount.toStringAsFixed(5);
-    }
+  //   // If fromCurrency is EUR convert to toCurrency
+  //   if (fromCurrency == 'EUR') {
+  //     double convertedAmount = amount * toRate;
+  //     return convertedAmount.toStringAsFixed(5);
+  //   }
 
-    // If toCurrency is EUR, convert from fromCurrency to EUR
-    if (toCurrency == 'EUR') {
-      double convertedAmount = amount / fromRate;
-      return convertedAmount.toStringAsFixed(5);
-    }
+  //   // If toCurrency is EUR, convert from fromCurrency to EUR
+  //   if (toCurrency == 'EUR') {
+  //     double convertedAmount = amount / fromRate;
+  //     return convertedAmount.toStringAsFixed(5);
+  //   }
 
-    // If neither currency is EUR, convert fromCurrency to EUR first
-    double amountInEUR = amount / fromRate; // Convert fromCurrency to EUR
-    double convertedAmount = amountInEUR * toRate; // Convert EUR to toCurrency
+  //   // If neither currency is EUR, convert fromCurrency to EUR first
+  //   double amountInEUR = amount / fromRate; // Convert fromCurrency to EUR
+  //   double convertedAmount = amountInEUR * toRate; // Convert EUR to toCurrency
 
-    return convertedAmount.toStringAsFixed(5);
+  //   return convertedAmount.toStringAsFixed(5);
   }
 
   //Function to get widget
@@ -158,10 +159,11 @@ class CurrencyConvertor {
                       onChanged: (String newValue) {
                         setState(() {
                           _inputAmount = newValue;
-                          
+                          print("ExRates:"+_exchangeRates.toString());
+                          print("Type of ${_exchangeRates['rates'][selectedFromCurrency]} rate:${_exchangeRates['rates'][selectedFromCurrency].runtimeType}");
                           String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
                           //double result = double.parse(newValue);
-                          _convertedAmount ='from:$selectedFromCurrency wRT: ${_exchangeRates['rates'][selectedFromCurrency]} to $selectedToCurrency wRT: ${_exchangeRates['rates'][selectedToCurrency]} and NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result and prev: <$_convertedAmount>';
+                          _convertedAmount ='from:$selectedFromCurrency wRT: ${_exchangeRates['rates'][selectedFromCurrency]} to $selectedToCurrency wRT: ${_exchangeRates['rates'][selectedToCurrency]} and NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result';
                           
                           // Check if the input is a valid number before converting
                           // if (double.tryParse(newValue) != null) {
