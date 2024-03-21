@@ -107,13 +107,14 @@ class CurrencyConvertor {
   String selectedFromCurrency,
   String selectedToCurrency,
   String inputValue,
+  String conversionOutput,
   void Function(String) updateSelectedFromCurrency,
   void Function(String) updateSelectedToCurrency,
   void Function(String) updateInputValue,
+  void Function(String) updateConversionOutputValue,
 ) {
     double _rotationAngle = 0;
     String _inputAmount = '';
-    String _convertedAmount = '';
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Center(
@@ -173,19 +174,19 @@ class CurrencyConvertor {
                           print("Type of ${_exchangeRates['rates'][selectedFromCurrency]} rate:${_exchangeRates['rates'][selectedFromCurrency].runtimeType}");
                           String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
                           //double result = double.parse(newValue);
-                          _convertedAmount ='from:$selectedFromCurrency wRT: ${_exchangeRates['rates'][selectedFromCurrency]} to $selectedToCurrency wRT: ${_exchangeRates['rates'][selectedToCurrency]} and NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result';
-                          
+                          conversionOutput ='from:$selectedFromCurrency wRT: ${_exchangeRates['rates'][selectedFromCurrency]} to $selectedToCurrency wRT: ${_exchangeRates['rates'][selectedToCurrency]} and NV:$newValue and isEmpt: ${conversionOutput.isEmpty} and RSC: $result';
+                          updateConversionOutputValue(conversionOutput);
                           // Check if the input is a valid number before converting
                           // if (double.tryParse(newValue) != null) {
-                          //   _convertedAmount = convertCurrency(
+                          //   conversionOutput = convertCurrency(
                           //     double.parse(newValue),
                           //     selectedFromCurrency,
                           //     selectedToCurrency,
                           //   );
-                          //   _convertedAmount ='IF:$_inputAmount';
+                          //   conversionOutput ='IF:$_inputAmount';
                           // } else {
-                          //   _convertedAmount='2';
-                          //   //_convertedAmount ='Val:$newValue';//''; // Reset or handle invalid input as needed
+                          //   conversionOutput='2';
+                          //   //conversionOutput ='Val:$newValue';//''; // Reset or handle invalid input as needed
                           // }
                         });
                       },
@@ -241,7 +242,7 @@ class CurrencyConvertor {
                     children: [
                       Expanded(
                         child: Text(
-                          _convertedAmount.isNotEmpty? _convertedAmount: "Enter amount to convert",
+                          conversionOutput.isNotEmpty? conversionOutput: "Enter amount to convert",
                           style: TextStyle(
                               fontSize:
                                   16), // Adjust font size to match TextField
