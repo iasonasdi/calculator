@@ -72,19 +72,16 @@ class CurrencyConvertor {
         return amount.toString();
       }
 
-  //   //Calculate different conversion rates
+      //Calculate different conversion rates & Parse exchange rates to double
       double fromRate = _exchangeRates['rates'][fromCurrency].toDouble();
       double toRate = _exchangeRates['rates'][toCurrency].toDouble();
-      return "FRRate: $fromRate toRate: $toRate";
-  //   // Parse exchange rates to double
-  //  // double fromRate = double.tryParse(_exchangeRates['rates'][fromCurrency]) ?? 1.0;
-  //   //double toRate = double.tryParse(_exchangeRates['rates'][toCurrency]) ?? 1.0;
 
-  //   // If fromCurrency is EUR convert to toCurrency
-  //   if (fromCurrency == 'EUR') {
-  //     double convertedAmount = amount * toRate;
-  //     return convertedAmount.toStringAsFixed(5);
-  //   }
+      // If fromCurrency is EUR convert to toCurrency
+      if (fromCurrency == 'EUR') {
+        double convertedAmount = amount * toRate;
+        return convertedAmount.toStringAsFixed(5);
+      }
+      return "FRRate: $fromRate toRate: $toRate";
 
   //   // If toCurrency is EUR, convert from fromCurrency to EUR
   //   if (toCurrency == 'EUR') {
