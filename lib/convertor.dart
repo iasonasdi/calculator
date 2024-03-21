@@ -156,8 +156,7 @@ class CurrencyConvertor {
                               selectedToCurrency,
                             );
                           } else {
-                            _convertedAmount =
-                                ''; // Reset or handle invalid input as needed
+                            _convertedAmount ='Val:$newValue';//''; // Reset or handle invalid input as needed
                           }
                         });
                       },
@@ -213,9 +212,7 @@ class CurrencyConvertor {
                     children: [
                       Expanded(
                         child: Text(
-                          _convertedAmount.isNotEmpty
-                              ? _convertedAmount
-                              : "Enter amount to convert",
+                          _convertedAmount.isNotEmpty? _convertedAmount: "Enter amount to convert",
                           style: TextStyle(
                               fontSize:
                                   16), // Adjust font size to match TextField
