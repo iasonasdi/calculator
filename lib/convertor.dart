@@ -95,8 +95,6 @@ class CurrencyConvertor {
 
   //Function to get widget
   //Convertor
-  // Widget buildConvertorLayout(String selectedFromCurrency,
-  //     String selectedToCurrency, String calculatorOutput) {
   Widget buildConvertorLayout(
     String selectedFromCurrency,
     String selectedToCurrency,
@@ -123,72 +121,69 @@ class CurrencyConvertor {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: TextField(
-                      keyboardType: TextInputType
-                          .number, // Ensures only numbers can be entered
-                      decoration: InputDecoration(
-                        labelText: 'Convert From',
-                        border: const OutlineInputBorder(),
-                        suffixIcon: Container(
-                          child: DropdownButton<String>(
-                            value: selectedFromCurrency,
-                            icon: const Icon(Icons.arrow_drop_down,
-                                color: Color.fromARGB(255, 8, 157, 176)),
-                            underline: Container(height: 0),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedFromCurrency = newValue!;
-                                updateSelectedFromCurrency(newValue);
-                                //Update Results every time drop down changes
-                                if (containsOnlyNumbers(inputValue)) {
-                                  conversionOutput = convertCurrency(
-                                      double.parse(inputValue),
-                                      selectedFromCurrency,
-                                      selectedToCurrency);
-                                  updateConversionOutputValue(conversionOutput);
-                                } else {
-                                  conversionOutput = 'ERR';
-                                }
-                              });
-                            },
-                            items: _exchangeRates['rates']
-                                .keys
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                              );
-                            }).toList(),
-                          ),
+              Flexible(
+                child: Container(
+                  width: MediaQuery.of(context).size.width *
+                      0.8, // Set width to 80% of screen width
+                  child: TextField(
+                    keyboardType: TextInputType
+                        .number, // Ensures only numbers can be entered
+                    decoration: InputDecoration(
+                      labelText: 'Convert From',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: Container(
+                        child: DropdownButton<String>(
+                          value: selectedFromCurrency,
+                          icon: const Icon(Icons.arrow_drop_down,
+                              color: Color.fromARGB(255, 8, 157, 176)),
+                          underline: Container(height: 0),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedFromCurrency = newValue!;
+                              updateSelectedFromCurrency(newValue);
+                              // Update Results every time drop down changes
+                              if (containsOnlyNumbers(inputValue)) {
+                                conversionOutput = convertCurrency(
+                                    double.parse(inputValue),
+                                    selectedFromCurrency,
+                                    selectedToCurrency);
+                                updateConversionOutputValue(conversionOutput);
+                              } else {
+                                conversionOutput = 'ERR';
+                              }
+                            });
+                          },
+                          items: _exchangeRates['rates']
+                              .keys
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
+                            );
+                          }).toList(),
                         ),
                       ),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          inputValue = newValue;
-                          //String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
-                          //double result = double.parse(newValue);
-                          if (containsOnlyNumbers(inputValue)) {
-                            conversionOutput = convertCurrency(
-                                double.parse(newValue),
-                                selectedFromCurrency,
-                                selectedToCurrency);
-                            updateConversionOutputValue(conversionOutput);
-                            updateInputValue(inputValue);
-                          } else {
-                            conversionOutput = 'ERR';
-                          }
-                        });
-                      },
                     ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        inputValue = newValue;
+                        if (containsOnlyNumbers(inputValue)) {
+                          conversionOutput = convertCurrency(
+                              double.parse(newValue),
+                              selectedFromCurrency,
+                              selectedToCurrency);
+                          updateConversionOutputValue(conversionOutput);
+                          updateInputValue(inputValue);
+                        } else {
+                          conversionOutput = 'ERR';
+                        }
+                      });
+                    },
                   ),
-                ],
+                ),
               ),
               const SizedBox(height: 20),
               //Animated Arrows
@@ -208,11 +203,8 @@ class CurrencyConvertor {
                       updateSelectedFromCurrency(selectedFromCurrency);
                       updateSelectedToCurrency(selectedToCurrency);
                       //Swap Values on inputs
-                      // String tempVal = inputValue;
-                      // inputValue = conversionOutput;
                       conversionOutput = '';
                       updateConversionOutputValue('');
-                      // updateInputValue(inputValue);
                       print("Swapped to: $inputValue and $conversionOutput");
                       // Update the rotation angle for the animation
                       _rotationAngle += 180;
@@ -231,65 +223,63 @@ class CurrencyConvertor {
               ),
               const SizedBox(height: 20),
               //Converted Result
-              Flexible(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 20), // Adjust padding to match TextField
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.grey), // Border color to match TextField
-                    borderRadius: BorderRadius.circular(
-                        4), // Border radius to match TextField
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          conversionOutput.isNotEmpty
-                              ? conversionOutput
-                              : "Enter amount to convert",
-                          style: TextStyle(
-                              fontSize:
-                                  16), // Adjust font size to match TextField
-                        ),
+              Container(
+                width: MediaQuery.of(context).size.width *
+                    0.8, // Set width to 80% of screen width
+                padding: EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 20), // Adjust padding to match TextField
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Colors.grey), // Border color to match TextField
+                  borderRadius: BorderRadius.circular(
+                      4), // Border radius to match TextField
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        conversionOutput.isNotEmpty
+                            ? conversionOutput
+                            : "Enter amount to convert",
+                        style: TextStyle(
+                            fontSize:
+                                16), // Adjust font size to match TextField
                       ),
-                      // Mimic the dropdown button from your TextField
-                      DropdownButton<String>(
-                        value: selectedToCurrency,
-                        icon: const Icon(Icons.arrow_drop_down,
-                            color: Color.fromARGB(255, 8, 157, 176)),
-                        underline: Container(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedToCurrency = newValue!;
-                            updateSelectedToCurrency(newValue);
-                            if (containsOnlyNumbers(inputValue)) {
-                              conversionOutput = convertCurrency(
-                                  double.parse(inputValue),
-                                  selectedFromCurrency,
-                                  selectedToCurrency);
-                              updateConversionOutputValue(conversionOutput);
-                            } else {
-                              conversionOutput = 'ERR';
-                            }
-                          });
-                        },
-                        items: _exchangeRates['rates']
-                            .keys
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold)),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
+                    ),
+                    DropdownButton<String>(
+                      value: selectedToCurrency,
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: Color.fromARGB(255, 8, 157, 176)),
+                      underline: Container(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedToCurrency = newValue!;
+                          if (containsOnlyNumbers(inputValue)) {
+                            conversionOutput = convertCurrency(
+                                double.parse(inputValue),
+                                selectedFromCurrency,
+                                selectedToCurrency);
+                            updateConversionOutputValue(conversionOutput);
+                          } else {
+                            conversionOutput = 'ERR';
+                          }
+                        });
+                      },
+                      items: _exchangeRates['rates']
+                          .keys
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
             ],
