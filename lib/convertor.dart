@@ -19,21 +19,28 @@ class CurrencyConvertor {
 
   //Function to fetch exchange rates
   Future<void> _fetchExchangeRates() async {
-    tk.updateLastCalledTime();
-    String request_url =
-        base_url + 'latest?access_key=$API_KEY&base=$currency_base';
-    final response = await http.get(Uri.parse(request_url));
-    //Receive response
-    if (response.statusCode == 200) {
-      _exchangeRates = json.decode(response.body);
-      if (_exchangeRates.containsKey('rates')) {
-        print('Length is: ${_exchangeRates['rates'].length}');
-      } else {
-        print('Rates not found.');
-      }
-    } else {
-      throw Exception('Failed to load exchange rates');
-    }
+    _exchangeRates = {
+      'success': true,
+      'timestamp': 1711015144,
+      'base': 'EUR',
+      'date': '2024-03-21',
+      'rates': {"AED":4.007555,"AFN":77.282145,"ALL":102.677444,"AMD":434.243349,"ANG":1.950369,"AOA":911.752906,"ARS":931.13656,"AUD":1.651461,"AWG":1.964272,"AZN":1.883941,"BAM":1.951958,"BBD":2.18499,"BDT":118.766249,"BGN":1.954588,"BHD":0.411348,"BIF":3095.777221,"BMD":1.091262,"BND":1.454697,"BOB":7.477318,"BRL":5.420074,"BSD":1.082165,"BTC":1.6323575e-5,"BTN":89.957038,"BWP":14.824638,"BYN":3.541414,"BYR":21388.739492,"BZD":2.181297,"CAD":1.471911,"CDF":3040.256407,"CHF":0.976085,"CLF":0.038131,"CLP":1052.151773,"CNY":7.85589,"COP":4211.311855,"CRC":544.558162,"CUC":1.091262,"CUP":28.918449,"CVE":110.04891,"CZK":25.219942,"DJF":192.699853,"DKK":7.45809,"DOP":63.947657,"DZD":146.679847,"EGP":50.934882,"ERN":16.368933,"ETB":61.466104,"EUR":1,"FJD":2.474055,"FKP":0.858601,"GBP":0.854294,"GEL":2.957611,"GGP":0.858601,"GHS":14.087338,"GIP":0.858601,"GMD":74.124026,"GNF":9302.203211,"GTQ":8.440349,"GYD":226.585082,"HKD":8.535035,"HNL":26.722874,"HRK":7.510476,"HTG":143.467632,"HUF":393.945576,"IDR":17101.388486,"ILS":3.95361,"IMP":0.858601,"INR":90.741672,"IQD":1417.603431,"IRR":45879.391989,"ISK":148.498683,"JEP":0.858601,"JMD":166.711052,"JOD":0.773594,"JPY":164.861896,"KES":145.138378,"KGS":97.679095,"KHR":4380.438798,"KMF":495.160776,"KPW":982.140015,"KRW":1447.678914,"KWD":0.335388,"KYD":0.901821,"KZT":487.638015,"LAK":22654.308848,"LBP":96905.629998,"LKR":329.14069,"LRD":210.204353,"LSL":20.526915,"LTL":3.222214,"LVL":0.660094,"LYD":5.221699,"MAD":10.874148,"MDL":19.208107,"MGA":4854.712062,"MKD":61.614278,"MMK":2272.516906,"MNT":3704.102515,"MOP":8.720257,"MRU":43.519561,"MUR":50.302881,"MVR":16.876361,"MWK":1821.714732,"MXN":18.22244,"MYR":5.145081,"MZN":69.292124,"NAD":20.52696,"NGN":1543.950486,"NIO":39.833791,"NOK":11.506471,"NPR":143.939618,"NZD":1.79314,"OMR":0.420099,"PAB":1.08217,"PEN":4.005217,"PGK":4.079196,"PHP":61.164183,"PKR":301.240829,"PLN":4.302902,"PYG":7903.408598,"QAR":3.973308,"RON":4.974296,"RSD":117.225538,"RUB":100.836444,"RWF":1391.737356,"SAR":4.092565,"SBD":9.22622,"SCR":14.728226,"SDG":639.479282,"SEK":11.343005,"SGD":1.461135,"SHP":1.388037,"SLE":24.680107,"SLL":24680.106593,"SOS":623.653249,"SRD":38.331689,"STD":22586.924683,"SVC":9.468321,"SYP":14188.43239,"SZL":20.452652,"THB":39.339609,"TJS":11.860248,"TMT":3.824874,"TND":3.373143,"TOP":2.5858,"TRY":35.380575,"TTD":7.345476,"TWD":34.77351,"TZS":2782.71853,"UAH":42.362952,"UGX":4193.765205,"USD":1.091262,"UYU":41.558017,"UZS":13594.244323,"VEF":3951769.370372,"VES":39.524557,"VND":27057.84672,"VUV":131.73759,"WST":3.008219,"XAF":654.704433,"XAG":0.042842,"XAU":0.000495,"XCD":2.94919,"XDR":0.812745,"XOF":654.665513,"XPF":119.331742,"YER":273.170257,"ZAR":20.426268,"ZMK":9822.625185,"ZMW":27.973815,"ZWL":351.385989},
+    };
+    // tk.updateLastCalledTime();
+    // String request_url =
+    //     base_url + 'latest?access_key=$API_KEY&base=$currency_base';
+    // final response = await http.get(Uri.parse(request_url));
+    // //Receive response
+    // if (response.statusCode == 200) {
+    //   _exchangeRates = json.decode(response.body);
+    //   if (_exchangeRates.containsKey('rates')) {
+    //     print('Length is: ${_exchangeRates['rates'].length}');
+    //   } else {
+    //     print('Rates not found.');
+    //   }
+    // } else {
+    //   throw Exception('Failed to load exchange rates');
+    // }
   }
 
   //Function to check if rates are needed
@@ -154,7 +161,7 @@ class CurrencyConvertor {
                           
                           //String result= convertCurrency(double.parse(newValue),selectedFromCurrency, selectedToCurrency);
                           double result = double.parse(newValue);
-                          _convertedAmount ='from:$selectedFromCurrency to $selectedToCurrency and NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result and prev: <$_convertedAmount>';
+                          _convertedAmount ='from:$selectedFromCurrency wRT: ${_exchangeRates['rates'][selectedFromCurrency]} to $selectedToCurrency wRT: ${_exchangeRates['rates'][selectedToCurrency]} and NV:$newValue and isEmpt: ${_convertedAmount.isEmpty} and RSC: $result and prev: <$_convertedAmount>';
                           
                           // Check if the input is a valid number before converting
                           // if (double.tryParse(newValue) != null) {
