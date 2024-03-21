@@ -20,8 +20,8 @@ class _CalculatorState extends State<Calculator> {
   CurrencyConvertor convertor = CurrencyConvertor();
   String selectedFromCurrency = 'EUR'; // Initially selected currency
   String selectedToCurrency = 'USD'; // Initially selected currency
-  String inputValue=''; //Input value for conversion
-  String conversionOutput=''; //Input value for conversion
+  String inputValue = ''; //Input value for conversion
+  String conversionOutput = ''; //Input value for conversion
 
   // Function to update selectedFromCurrency
   void updateSelectedFromCurrency(String newValue) {
@@ -43,13 +43,13 @@ class _CalculatorState extends State<Calculator> {
       inputValue = newValue;
     });
   }
+
   // Function to update inputValue
   void updateConversionOutputValue(String newValue) {
     setState(() {
       conversionOutput = newValue;
     });
   }
-
 
   // Side Panel
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
