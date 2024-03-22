@@ -84,20 +84,20 @@ class _CalculatorState extends State<Calculator> {
           child: PopupMenuButton<int>(
             onSelected: (item) => _onSelectMenuItem(item),
             itemBuilder: (context) => [
-              PopupMenuItem<int>(
+              const PopupMenuItem<int>(
                 value: 0,
                 child: Row(
-                  children: const [
+                  children: [
                     Icon(Icons.lightbulb_outline, color: Colors.black),
                     SizedBox(width: 8),
                     Text('Theme', style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ),
-              PopupMenuItem<int>(
+              const PopupMenuItem<int>(
                 value: 1,
                 child: Row(
-                  children: const [
+                  children: [
                     Icon(Icons.help_outline, color: Colors.black),
                     SizedBox(width: 8),
                     Text('Help', style: TextStyle(color: Colors.black)),
@@ -133,10 +133,6 @@ class _CalculatorState extends State<Calculator> {
           ),
         ],
       ),
-      // body: isCalculatorMode
-      //     ? _buildCalculatorLayout()
-      //     : convertor.buildConvertorLayout(selectedFromCurrency,
-      //         selectedToCurrency,_output), //convertor.buildConvertorLayout(),
       body: isCalculatorMode
           ? _buildCalculatorLayout()
           : convertor.buildConvertorLayout(
@@ -417,7 +413,6 @@ class _CalculatorState extends State<Calculator> {
             return;
           }
         }
-
         _output += text;
       }
     });
@@ -459,7 +454,6 @@ class _CalculatorState extends State<Calculator> {
       Expression exp = p.parse(expression);
       ContextModel cm = ContextModel();
       double result = exp.evaluate(EvaluationType.REAL, cm);
-      //print("Result: $result");
       reset = true;
       return result
           .toStringAsFixed(result.truncateToDouble() == result ? 0 : 10);
@@ -499,7 +493,7 @@ class _CalculatorState extends State<Calculator> {
         return Container(
           padding: EdgeInsets.all(20),
           color: _isDarkThemeEnabled ? Color(0xFF435585) : Colors.white,
-          child: Wrap(
+          child: const Wrap(
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.info_outline, color: Colors.black),
@@ -508,7 +502,7 @@ class _CalculatorState extends State<Calculator> {
               ),
               ListTile(
                 leading: Icon(Icons.history, color: Colors.black),
-                title: Text('Click on any history to use it again.',
+                title: Text('Click on any item in history to use it again.',
                     style: TextStyle(color: Colors.black)),
               ),
               ListTile(
@@ -528,14 +522,12 @@ class _CalculatorState extends State<Calculator> {
     switch (item) {
       case 0:
         // Handle light bulb (Theme) action
-        print("Theme selected");
         setState(() {
           _isDarkThemeEnabled = !_isDarkThemeEnabled;
         });
         break;
       case 1:
         // Handle question mark (Help) action
-        print("Help selected");
         _showHelpPanel();
         break;
       default:

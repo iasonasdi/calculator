@@ -7,12 +7,11 @@ import 'package:http/http.dart' as http;
 class CurrencyConvertor {
   //API data
   String API_KEY =
-      "34c2a9a9d5855d3027a8fe8c8830c853"; //"516532786ebd6047df9136338cc5f3bc";
+      "34c2a9a9d5855d3027a8fe8c8830c853"; 
   String base_url = 'http://data.fixer.io/api/';
   String currency_base = 'EUR';
   //dynamic fetch data
   Map<String, dynamic> _exchangeRates = {};
-
 
   TimeKeeper tk = TimeKeeper();
 
@@ -22,11 +21,7 @@ class CurrencyConvertor {
   }
 
   //Function to fetch exchange rates
-  Future<void> _fetchExchangeRates() async {
-//TEST
-      _exchangeRates = getDefaultRates();
-      return;
-//TEST
+  Future<void> _fetchExchangeRates() async { 
     tk.updateLastCalledTime();
     String request_url =
         base_url + 'latest?access_key=$API_KEY&base=$currency_base';
@@ -34,11 +29,8 @@ class CurrencyConvertor {
     //Receive response
     if (response.statusCode == 200) {
       _exchangeRates = json.decode(response.body);
-      if (_exchangeRates.containsKey('rates')) {
-        print('Length is: ${_exchangeRates['rates'].length}');
-      } else {
+      if (!_exchangeRates.containsKey('rates')) {
         _exchangeRates = getDefaultRates();
-        print('Rates not found.');
       }
     } else {
       _exchangeRates = getDefaultRates();
@@ -49,15 +41,12 @@ class CurrencyConvertor {
   //Function to check if rates are needed
   void checkRates() {
     if (needFetching()) {
-      print("Needs fetching");
       _fetchExchangeRates();
     }
   }
 
   //Function to check if rates are needed
   bool needFetching() {
-    print('Checking need of rates');
-    print("Current rates:" + _exchangeRates.toString());
     return _exchangeRates.isEmpty || tk.checkElapsedTime();
   }
 
@@ -147,42 +136,7 @@ class CurrencyConvertor {
                           borderSide:
                               BorderSide(color: Color(0xFF363062), width: 2.0),
                         ),
-                        suffixIcon: Container(
-                                // child: DropdownButton<String>(
-                                //   value: selectedFromCurrency,
-                                //   icon: Icon(Icons.arrow_drop_down,
-                                //       color: _isDarkThemeEnabled
-                                //           ? Color(0xFF818FB4)
-                                //           : Color.fromARGB(255, 8, 157, 176)),
-                                //   underline: Container(height: 0),
-                                //   onChanged: (String? newValue) {
-                                //     setState(() {
-                                //       selectedFromCurrency = newValue!;
-                                //       updateSelectedFromCurrency(newValue);
-                                //       // Update Results every time drop down changes
-                                //       if (containsOnlyNumbers(inputValue)) {
-                                //         conversionOutput = convertCurrency(
-                                //             double.parse(inputValue),
-                                //             selectedFromCurrency,
-                                //             selectedToCurrency);
-                                //         updateConversionOutputValue(conversionOutput);
-                                //       } else {
-                                //         conversionOutput = 'ERR';
-                                //       }
-                                //     });
-                                //   },
-                                //   items: _exchangeRates['rates']
-                                //       .keys
-                                //       .map<DropdownMenuItem<String>>((String value) {
-                                //     return DropdownMenuItem<String>(
-                                //       value: value,
-                                //       child: Text(value,
-                                //           style: const TextStyle(
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold)),
-                                //     );
-                                //   }).toList(),
-                                // ),
+                        suffixIcon: Container(                                
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton2<String>(
                                     isExpanded: true,
@@ -324,7 +278,6 @@ class CurrencyConvertor {
                       //Swap Values on inputs
                       conversionOutput = '';
                       updateConversionOutputValue('');
-                      print("Swapped to: $inputValue and $conversionOutput");
                       // Update the rotation angle for the animation
                       _rotationAngle += 180;
                     });
@@ -365,39 +318,6 @@ class CurrencyConvertor {
                         style: TextStyle(color: Colors.black, fontSize: 18),
                       ),
                     ),
-                    // DropdownButton<String>(
-                    //   value: selectedToCurrency,
-                    //   icon: Icon(Icons.arrow_drop_down,
-                    //       color: _isDarkThemeEnabled
-                    //           ? Color(0xFF818FB4)
-                    //           : Color.fromARGB(255, 8, 157, 176)),
-                    //   underline: Container(),
-                    //   onChanged: (String? newValue) {
-                    //     setState(() {
-                    //       selectedToCurrency = newValue!;
-                    //       if (containsOnlyNumbers(inputValue)) {
-                    //         conversionOutput = convertCurrency(
-                    //             double.parse(inputValue),
-                    //             selectedFromCurrency,
-                    //             selectedToCurrency);
-                    //         updateConversionOutputValue(conversionOutput);
-                    //       } else {
-                    //         conversionOutput = 'ERR';
-                    //       }
-                    //     });
-                    //   },
-                    //   items: _exchangeRates['rates']
-                    //       .keys
-                    //       .map<DropdownMenuItem<String>>((String value) {
-                    //     return DropdownMenuItem<String>(
-                    //       value: value,
-                    //       child: Text(value,
-                    //           style: const TextStyle(
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.bold)),
-                    //     );
-                    //   }).toList(),
-                    // ),
                     DropdownButtonHideUnderline(
                                   child: DropdownButton2<String>(
                                     isExpanded: true,
@@ -489,7 +409,6 @@ class CurrencyConvertor {
                                     },
                                   ),
                                 ),
-
                   ],
                 ),
               ),
@@ -500,8 +419,8 @@ class CurrencyConvertor {
     );
   }
 
+  //Function that use a regular expression to match only digits (0-9)
   bool containsOnlyNumbers(String inputAmount) {
-    // Use a regular expression to match only digits (0-9)
     return RegExp(r'^[0-9]+$').hasMatch(inputAmount);
   }
 
