@@ -215,12 +215,12 @@ class CurrencyConvertor {
                                                 double.parse(inputValue),
                                                 selectedFromCurrency,
                                                 selectedToCurrency);
-                                            updateConversionOutputValue(conversionOutput);
                                           }else if(inputValue==''){
                                               conversionOutput='';
                                           } else {
                                             conversionOutput = 'ERR';
                                           }
+                                            updateConversionOutputValue(conversionOutput);
                                         });
                                       },
                                     buttonStyleData: const ButtonStyleData(
@@ -423,6 +423,7 @@ class CurrencyConvertor {
                                      onChanged: (String? newValue) {
                                         setState(() {
                                           selectedToCurrency = newValue!;
+                                          updateSelectedToCurrency(newValue);
                                           if (containsOnlyNumbers(inputValue)) {
                                             conversionOutput = convertCurrency(
                                                 double.parse(inputValue),
