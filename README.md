@@ -57,7 +57,7 @@ The application offer two themes: Light and Dark.
 
 1. Light Theme
    - Calculator Screen
-   <img src="/AppImages/mainScreen.jpg" width="100" height="150"> 
+   <img src="/AppImages/mainScreen.jpg" width="300" height="400"> 
    - History Screen
    ![Calculator's History Screen.](./AppImages/historyScreen.jpg | width=100)
    - Conversion Screen
