@@ -57,16 +57,16 @@ The application offer two themes: Light and Dark.
 
 1. Light Theme
    - Calculator Screen
-   ![Main Calculator Screen.](https://drive.google.com/file/d/1FgowLBUDxa9RFgk-bhKqnNH6j1ROUPQX/view?usp=drive_link)
+   ![Main Calculator Screen.](./AppImages/mainScreen.jpg)
    - History Screen
-   ![Calculator's History Screen.](https://drive.google.com/file/d/1Fd2brB2sRX9Z78mfW9lRc25sb92hahZ7/view?usp=sharing)
+   ![Calculator's History Screen.](./AppImages/historyScreen.jpg)
    - Conversion Screen
-   ![Calculator's Conversion Screen.](https://drive.google.com/file/d/1FDbCvnHPjrKt3_6i6fZTmQHQltbPuVxk/view?usp=drive_link)
+   ![Calculator's Conversion Screen.](./AppImages/conversionScreen.jpg)
 
 2. Dark Theme
    - Calculator Screen
-   ![Main Calculator Screen.](https://drive.google.com/file/d/1FYtpbd0vBDGtKB0u2tTRWJcfGD4q5tVs/view?usp=drive_link)
+   ![Main Calculator Screen.](./AppImages/mainScreenDark.jpg)
    - History Screen
-   ![Calculator's History Screen.](https://drive.google.com/file/d/1FYPEiXm5b8fTzTdHrcXni2ZkVoq7UZm2/view?usp=drive_link)
+   ![Calculator's History Screen.](./AppImages/historyScreenDark.jpg)
    - Conversion Screen
-   ![Calculator's Conversion Screen.](https://drive.google.com/file/d/1FGtz_Sv_tK9PzUMG7zGRIFO7jvgrqJAl/view?usp=drive_link)
+   ![Calculator's Conversion Screen.](./AppImages/conversionScreenDark.jpg)
