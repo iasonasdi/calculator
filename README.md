@@ -46,7 +46,7 @@ Three branches are publically available:
 1. Main Branch
    - Related to the application's code and implementation in a stable state.
 2. Dev Branch
-   - Related to the application's code currently under development to improve or implement further futures.
+   - Related to the application's code currently under development to improve or implement further features.
 3. Deploy Branch
    - Used as a deploy reference for codemagic.io
 
@@ -57,16 +57,17 @@ The application offer two themes: Light and Dark.
 
 1. **Light Theme**
    - Calculator Screen
-   <img src="./AppImages/mainScreen.jpg" width="300" height="540"><br><br>
+   <img src="./AppImages/mainScreen.jpg" width="300" height="640"><br><br>
    - History Screen
-   <img src="./AppImages/historyScreen.jpg" width="300" height="540"><br><br>
+   <img src="./AppImages/historyScreen.jpg" width="300" height="640"><br><br>
    - Conversion Screen
-   <img src="./AppImages/conversionScreen.jpg" width="300" height="540"><br><br>
+   <img src="./AppImages/conversionScreen.jpg" width="300" height="640"><br><br>
 
 2. **Dark Theme**
    - Calculator Screen
-   <img src="./AppImages/mainScreenDark.jpg" width="300" height="540"><br><br>
+   <img src="./AppImages/mainScreenDark.jpg" width="300" height="640"><br><br>
    - History Screen
-   <img src="./AppImages/historyScreenDark.jpg" width="300" height="540"><br><br>
+   <img src="./AppImages/historyScreenDark.jpg" width="300" height="640"><br><br>
    - Conversion Screen
-   <img src="./AppImages/conversionScreenDark.jpg" width="300" height="540"><br><br>
+   <img src="./AppImages/conversionScreenDark.jpg" width="300" height="640"><br><br>
+

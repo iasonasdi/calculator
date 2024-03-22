@@ -113,7 +113,7 @@ class CurrencyConvertor {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Convertor Mode',
+                'Convert Mode',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
