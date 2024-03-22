@@ -55,7 +55,7 @@ Three branches are publically available:
 
 The application offer two themes: Light and Dark.
 
-1. Light Theme
+1. **Light Theme**
    - Calculator Screen
    <img src="./AppImages/mainScreen.jpg" width="300" height="540"><br><br>
    - History Screen
@@ -63,7 +63,7 @@ The application offer two themes: Light and Dark.
    - Conversion Screen
    <img src="./AppImages/conversionScreen.jpg" width="300" height="540"><br><br>
 
-2. Dark Theme
+2. **Dark Theme**
    - Calculator Screen
    <img src="./AppImages/mainScreenDark.jpg" width="300" height="540"><br><br>
    - History Screen
