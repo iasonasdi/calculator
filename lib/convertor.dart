@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calc/timeKeeper.dart';
 import 'dart:convert';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:http/http.dart' as http;
 
 class CurrencyConvertor {
@@ -12,7 +13,9 @@ class CurrencyConvertor {
   //dynamic fetch data
   Map<String, dynamic> _exchangeRates = {};
 
+
   TimeKeeper tk = TimeKeeper();
+
   //Constructor
   CurrencyConvertor() {
     _fetchExchangeRates();
@@ -20,6 +23,10 @@ class CurrencyConvertor {
 
   //Function to fetch exchange rates
   Future<void> _fetchExchangeRates() async {
+//TEST
+      _exchangeRates = getDefaultRates();
+      return;
+//TEST
     tk.updateLastCalledTime();
     String request_url =
         base_url + 'latest?access_key=$API_KEY&base=$currency_base';
@@ -104,7 +111,10 @@ class CurrencyConvertor {
       void Function(String) updateSelectedToCurrency,
       void Function(String) updateInputValue,
       void Function(String) updateConversionOutputValue,
-      bool _isDarkThemeEnabled) {
+      bool _isDarkThemeEnabled,
+      TextEditingController textEditingFromController,
+      TextEditingController textEditingToController,
+      ) {
     double _rotationAngle = 0;
     //String _inputAmount = '';
     return StatefulBuilder(
@@ -138,41 +148,135 @@ class CurrencyConvertor {
                               BorderSide(color: Color(0xFF363062), width: 2.0),
                         ),
                         suffixIcon: Container(
-                          child: DropdownButton<String>(
-                            value: selectedFromCurrency,
-                            icon: Icon(Icons.arrow_drop_down,
-                                color: _isDarkThemeEnabled
-                                    ? Color(0xFF818FB4)
-                                    : Color.fromARGB(255, 8, 157, 176)),
-                            underline: Container(height: 0),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedFromCurrency = newValue!;
-                                updateSelectedFromCurrency(newValue);
-                                // Update Results every time drop down changes
-                                if (containsOnlyNumbers(inputValue)) {
-                                  conversionOutput = convertCurrency(
-                                      double.parse(inputValue),
-                                      selectedFromCurrency,
-                                      selectedToCurrency);
-                                  updateConversionOutputValue(conversionOutput);
-                                } else {
-                                  conversionOutput = 'ERR';
-                                }
-                              });
-                            },
-                            items: _exchangeRates['rates']
-                                .keys
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                              );
-                            }).toList(),
-                          ),
+                                // child: DropdownButton<String>(
+                                //   value: selectedFromCurrency,
+                                //   icon: Icon(Icons.arrow_drop_down,
+                                //       color: _isDarkThemeEnabled
+                                //           ? Color(0xFF818FB4)
+                                //           : Color.fromARGB(255, 8, 157, 176)),
+                                //   underline: Container(height: 0),
+                                //   onChanged: (String? newValue) {
+                                //     setState(() {
+                                //       selectedFromCurrency = newValue!;
+                                //       updateSelectedFromCurrency(newValue);
+                                //       // Update Results every time drop down changes
+                                //       if (containsOnlyNumbers(inputValue)) {
+                                //         conversionOutput = convertCurrency(
+                                //             double.parse(inputValue),
+                                //             selectedFromCurrency,
+                                //             selectedToCurrency);
+                                //         updateConversionOutputValue(conversionOutput);
+                                //       } else {
+                                //         conversionOutput = 'ERR';
+                                //       }
+                                //     });
+                                //   },
+                                //   items: _exchangeRates['rates']
+                                //       .keys
+                                //       .map<DropdownMenuItem<String>>((String value) {
+                                //     return DropdownMenuItem<String>(
+                                //       value: value,
+                                //       child: Text(value,
+                                //           style: const TextStyle(
+                                //               color: Colors.black,
+                                //               fontWeight: FontWeight.bold)),
+                                //     );
+                                //   }).toList(),
+                                // ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2<String>(
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Select Item',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    ),
+                                    items: _exchangeRates['rates']
+                                      .keys
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value,
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold)),
+                                    );
+                                  }).toList(),
+                                    value: selectedFromCurrency,
+                                    onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedFromCurrency = newValue!;
+                                          updateSelectedFromCurrency(newValue);
+                                          // Update Results every time drop down changes
+                                          if (containsOnlyNumbers(inputValue)) {
+                                            conversionOutput = convertCurrency(
+                                                double.parse(inputValue),
+                                                selectedFromCurrency,
+                                                selectedToCurrency);
+                                            updateConversionOutputValue(conversionOutput);
+                                          }else if(inputValue==''){
+                                              conversionOutput='';
+                                          } else {
+                                            conversionOutput = 'ERR';
+                                          }
+                                        });
+                                      },
+                                    buttonStyleData: const ButtonStyleData(
+                                      padding: EdgeInsets.symmetric(horizontal: 16),
+                                      height: 40,
+                                      width: 100,
+                                    ),
+                                    dropdownStyleData: const DropdownStyleData(
+                                      maxHeight: 200,
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 40,
+                                    ),
+                                    dropdownSearchData: DropdownSearchData(
+                                      searchController: textEditingFromController,
+                                      searchInnerWidgetHeight: 50,
+                                      searchInnerWidget: Container(
+                                        height: 50,
+                                        padding: const EdgeInsets.only(
+                                          top: 8,
+                                          bottom: 4,
+                                          right: 8,
+                                          left: 8,
+                                        ),
+                                        child: TextFormField(
+                                          expands: true,
+                                          maxLines: null,
+                                          controller: textEditingFromController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search for an item...',
+                                            hintStyle: const TextStyle(fontSize: 12),
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      searchMatchFn: (item, searchValue) {
+                                        return item.value.toString().toUpperCase().contains(searchValue.toUpperCase());
+                                      },
+                                    ),
+                                    //This to clear the search value when you close the menu
+                                    onMenuStateChange: (isOpen) {
+                                      if (!isOpen) {
+                                        textEditingFromController.clear();
+                                      }
+                                    },
+                                  ),
+                                ),
+
+
                         ),
                       ),
                       onChanged: (String newValue) {
@@ -183,11 +287,13 @@ class CurrencyConvertor {
                                 double.parse(newValue),
                                 selectedFromCurrency,
                                 selectedToCurrency);
-                            updateConversionOutputValue(conversionOutput);
-                            updateInputValue(inputValue);
+                          }else if(inputValue==''){
+                            conversionOutput='';
                           } else {
                             conversionOutput = 'ERR';
                           }
+                          updateConversionOutputValue(conversionOutput);
+                          updateInputValue(inputValue);
                         });
                       },
                       style: const TextStyle(color: Colors.black)),
@@ -255,43 +361,134 @@ class CurrencyConvertor {
                       child: Text(
                         conversionOutput.isNotEmpty
                             ? conversionOutput
-                            : "Enter amount to convert",
+                            : "Converted amount",
                         style: TextStyle(color: Colors.black, fontSize: 18),
                       ),
                     ),
-                    DropdownButton<String>(
-                      value: selectedToCurrency,
-                      icon: Icon(Icons.arrow_drop_down,
-                          color: _isDarkThemeEnabled
-                              ? Color(0xFF818FB4)
-                              : Color.fromARGB(255, 8, 157, 176)),
-                      underline: Container(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedToCurrency = newValue!;
-                          if (containsOnlyNumbers(inputValue)) {
-                            conversionOutput = convertCurrency(
-                                double.parse(inputValue),
-                                selectedFromCurrency,
-                                selectedToCurrency);
-                            updateConversionOutputValue(conversionOutput);
-                          } else {
-                            conversionOutput = 'ERR';
-                          }
-                        });
-                      },
-                      items: _exchangeRates['rates']
-                          .keys
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                        );
-                      }).toList(),
-                    ),
+                    // DropdownButton<String>(
+                    //   value: selectedToCurrency,
+                    //   icon: Icon(Icons.arrow_drop_down,
+                    //       color: _isDarkThemeEnabled
+                    //           ? Color(0xFF818FB4)
+                    //           : Color.fromARGB(255, 8, 157, 176)),
+                    //   underline: Container(),
+                    //   onChanged: (String? newValue) {
+                    //     setState(() {
+                    //       selectedToCurrency = newValue!;
+                    //       if (containsOnlyNumbers(inputValue)) {
+                    //         conversionOutput = convertCurrency(
+                    //             double.parse(inputValue),
+                    //             selectedFromCurrency,
+                    //             selectedToCurrency);
+                    //         updateConversionOutputValue(conversionOutput);
+                    //       } else {
+                    //         conversionOutput = 'ERR';
+                    //       }
+                    //     });
+                    //   },
+                    //   items: _exchangeRates['rates']
+                    //       .keys
+                    //       .map<DropdownMenuItem<String>>((String value) {
+                    //     return DropdownMenuItem<String>(
+                    //       value: value,
+                    //       child: Text(value,
+                    //           style: const TextStyle(
+                    //               color: Colors.black,
+                    //               fontWeight: FontWeight.bold)),
+                    //     );
+                    //   }).toList(),
+                    // ),
+                    DropdownButtonHideUnderline(
+                                  child: DropdownButton2<String>(
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Select Item',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    ),
+                                    items: _exchangeRates['rates']
+                                      .keys
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value,
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold)),
+                                    );
+                                  }).toList(),
+                                    value: selectedToCurrency,
+                                     onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedToCurrency = newValue!;
+                                          if (containsOnlyNumbers(inputValue)) {
+                                            conversionOutput = convertCurrency(
+                                                double.parse(inputValue),
+                                                selectedFromCurrency,
+                                                selectedToCurrency);
+                                          }else if(inputValue==''){
+                                              conversionOutput='';
+                                          } else {
+                                            conversionOutput = 'ERR';
+                                          }
+                                          updateConversionOutputValue(conversionOutput);
+                                        });
+                                      },
+                                    buttonStyleData: const ButtonStyleData(
+                                      padding: EdgeInsets.symmetric(horizontal: 16),
+                                      height: 40,
+                                      width: 100,
+                                    ),
+                                    dropdownStyleData: const DropdownStyleData(
+                                      maxHeight: 200,
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 40,
+                                    ),
+                                    dropdownSearchData: DropdownSearchData(
+                                      searchController: textEditingToController,
+                                      searchInnerWidgetHeight: 50,
+                                      searchInnerWidget: Container(
+                                        height: 50,
+                                        padding: const EdgeInsets.only(
+                                          top: 8,
+                                          bottom: 4,
+                                          right: 8,
+                                          left: 8,
+                                        ),
+                                        child: TextFormField(
+                                          expands: true,
+                                          maxLines: null,
+                                          controller: textEditingToController,
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 8,
+                                            ),
+                                            hintText: 'Search for an item...',
+                                            hintStyle: const TextStyle(fontSize: 12),
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      searchMatchFn: (item, searchValue) {
+                                        return item.value.toString().toUpperCase().contains(searchValue.toUpperCase());
+                                      },
+                                    ),
+                                    //This to clear the search value when you close the menu
+                                    onMenuStateChange: (isOpen) {
+                                      if (!isOpen) {
+                                        textEditingToController.clear();
+                                      }
+                                    },
+                                  ),
+                                ),
+
                   ],
                 ),
               ),

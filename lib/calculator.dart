@@ -22,6 +22,8 @@ class _CalculatorState extends State<Calculator> {
   String selectedToCurrency = 'USD'; // Initially selected currency
   String inputValue = ''; //Input value for conversion
   String conversionOutput = ''; //Input value for conversion
+  final TextEditingController textEditingFromController = TextEditingController();  //Searching for DropDown
+  final TextEditingController textEditingToController = TextEditingController();  //Searching for DropDown ToValue
 
   //Dark theme
   bool _isDarkThemeEnabled = false;
@@ -147,6 +149,8 @@ class _CalculatorState extends State<Calculator> {
               updateInputValue,
               updateConversionOutputValue,
               _isDarkThemeEnabled,
+              textEditingFromController,
+              textEditingToController,
             ),
       //Side Panel
       endDrawer: Drawer(
